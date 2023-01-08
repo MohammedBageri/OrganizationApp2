@@ -67,9 +67,9 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <!-- <v-icon small class="mr-2" @click="editItem(item)">
+            <v-icon small class="mr-2" @click="complate(item)">
               mdi-pencil
-            </v-icon> -->
+            </v-icon>
             <v-icon small class="mr-2" @click="deleteItem(item)">
               mdi-delete
             </v-icon>
@@ -123,6 +123,10 @@ export default {
   },
 
   methods: {
+    async complate(item) {
+      const id = item._id;
+      this.$router.push(`/organization/create/${id}`);
+    },
     async editItem(item) {
       this.$store.state.organization.organization = Object.assign({}, item);
       this.$store.state.organization.organization.lastRenewalDate = day(
@@ -140,9 +144,17 @@ export default {
       this.$store.state.organization.organization.lastRenewalDate = day(
         this.$store.state.organization.organization.lastRenewalDate
       ).format("YYYY-MM-DD");
-      console.log(`/uploads/${this.$store.state.organization.organization.logo.replace(/\\/g, '/')}`)
+      console.log(
+        `/uploads/${this.$store.state.organization.organization.logo.replace(
+          /\\/g,
+          "/"
+        )}`
+      );
       const res = await axios.get(
-        `/${this.$store.state.organization.organization.logo.replace(/\\/g, '/')}`,
+        `/${this.$store.state.organization.organization.logo.replace(
+          /\\/g,
+          "/"
+        )}`,
         {
           responseType: "blob",
         }
@@ -158,7 +170,10 @@ export default {
       });
       if (this.$store.state.organization.organization.OrganizationalChart) {
         const res = await axios.get(
-          `/${this.$store.state.organization.organization.OrganizationalChart.replace(/\\/g, '/')}`,
+          `/${this.$store.state.organization.organization.OrganizationalChart.replace(
+            /\\/g,
+            "/"
+          )}`,
           {
             responseType: "blob",
           }

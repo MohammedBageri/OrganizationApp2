@@ -7,11 +7,10 @@ module.exports = {
   },
 };
 
-
 // module.exports = {
 //   service: 'gmail',
 // 		auth: {
 // 			user: '',
-// 			pass: '', 
+// 			pass: '',
 // 		},
 // }
