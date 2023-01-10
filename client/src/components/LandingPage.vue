@@ -2,14 +2,8 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col class="text-center" cols="12" lg="6" md="6" sm="12">
-        <v-chip
-          class="ma-2 rounded"
-          color="#14425a"
-          label
-          outlined
-          x-large
-        >
-       <h4> الدليل الرقمي لمنظمات المجتمع المدني - عدن</h4>
+        <v-chip class="ma-2 rounded" color="#14425a" label outlined x-large>
+          <h4>الدليل الرقمي لمنظمات المجتمع المدني - عدن</h4>
         </v-chip>
         <h2>اهلاً وسهلاً بك</h2>
         <h3 class="mt-2">في وزارة الشئون الإجتماعية والعمل</h3>
@@ -28,7 +22,11 @@
       </v-col>
 
       <v-col cols="12" lg="5" md="6" sm="12">
-        <v-img src="../../public/organization.jpg" max-height="400px" max-width="400px"></v-img>
+        <v-img
+          src="/organization.jpg"
+          max-height="400px"
+          max-width="400px"
+        ></v-img>
       </v-col>
     </v-row>
   </v-container>
@@ -47,5 +45,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

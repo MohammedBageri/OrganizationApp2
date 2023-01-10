@@ -8,7 +8,7 @@
               <v-row>
                 <v-col cols="6" class="mt-3" sm="4" md="4" lg="2">
                   <v-img
-                    src="../../src/assets/Yemen.png"
+                    src="/Yemen.png"
                     max-height="150"
                     max-width="150"
                   ></v-img>
@@ -196,7 +196,7 @@
     </v-row>
   </AppLayout>
 </template>
-  
+
 <script>
 import AppLayout from "../../layouts/AppLayout.vue";
 import Section1 from "../../components/OrganizationSections/Section1.vue";

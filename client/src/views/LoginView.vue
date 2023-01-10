@@ -11,7 +11,7 @@
                     <div style="text-align: center; padding: 180px 0">
                       <div class="d-flex justify-center shadow-lg">
                         <v-img
-                          src="../../src/assets/Yemen.png "
+                          src="Yemen.png "
                           max-height="200"
                           max-width="200"
                         />
@@ -27,7 +27,7 @@
                     </div>
                   </v-col>
                   <v-col cols="12" md="6" class="mt-16">
-                    <v-card-text >
+                    <v-card-text>
                       <h4 class="text-center">تسجيل الدخول لحسابك</h4>
                       <h6 class="text-center grey--text">
                         تسجيل الدخول لحسابك لأضافة و تعديل المنظمات
@@ -46,7 +46,7 @@
                             dense
                             color="indigo darken-1"
                             autocomplete="false"
-                            :class="!error ? 'mt-16': ''"
+                            :class="!error ? 'mt-16' : ''"
                             reverse
                           />
                           <v-text-field
@@ -113,7 +113,7 @@ export default {
     passowrd: "",
     msg: "",
     error: false,
-    isLoading: false
+    isLoading: false,
   }),
   props: {
     source: String,
@@ -123,16 +123,16 @@ export default {
   },
   methods: {
     async login() {
-      this.isLoading = true
+      this.isLoading = true;
       try {
         let result = await this.$store.dispatch("user/login", {
-        email: this.email,
-        password: this.passowrd,
-      });
-      this.isLoading = false;
-      if (result) {
-        this.$router.push("/requist-timeline");
-      }
+          email: this.email,
+          password: this.passowrd,
+        });
+        this.isLoading = false;
+        if (result) {
+          this.$router.push("/requist-timeline");
+        }
       } catch (error) {
         this.isLoading = false;
         this.error = true;
