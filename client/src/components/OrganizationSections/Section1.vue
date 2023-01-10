@@ -63,6 +63,72 @@
         <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            v-model="$store.state.organization.organization.fieldWork"
+            :rules="textRules"
+            outlined
+            dense
+            label="مجال عمل المؤسسة"
+            reverse
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-text-field
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            v-model="$store.state.organization.organization.email"
+            type="emil"
+            outlined
+            dense
+            :rules="textRules"
+            label="البريد الإلكتروني"
+            reverse
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-text-field
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            v-model="$store.state.organization.organization.website"
+            type="sit"
+            outlined
+            dense
+            label="الموقع الإلكتروني إن وجد"
+            reverse
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-combobox
+            v-model="
+              $store.state.organization.organization.localOrInternational
+            "
+            class="text-right rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            outlined
+            dense
+            :items="items"
+            :rules="textRules"
+            label="محلية/دولية"
+            reverse
+          ></v-combobox>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-combobox
+            v-model="$store.state.organization.organization.mapArea"
+            class="
+              text-right
+              selection
+              rounded-bl-xl rounded-tl-xl rounded-tr-xl
+            "
+            item-text="name"
+            item-value="_id"
+            outlined
+            :rules="textRules"
+            dense
+            :items="$store.state.mapAreas"
+            label="النطاق الجغرافي"
+            reverse
+          ></v-combobox>
+        </v-col>
+        <!-- <v-col cols="12" sm="6" md="6" lg="4">
+          <v-text-field
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
             v-model="$store.state.organization.organization.permitNumber"
             :rules="textRules"
             outlined
@@ -71,8 +137,8 @@
             reverse
             dir="ltr"
           ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
+        </v-col> -->
+        <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
             v-model="$store.state.organization.organization.permitDate"
@@ -83,10 +149,10 @@
             label="تاريخ إصدارة"
             reverse
           ></v-text-field>
-        </v-col>
+        </v-col> -->
       </v-row>
 
-      <v-row dense>
+      <!-- <v-row dense>
         <v-col cols="12">
           <v-divider />
         </v-col>
@@ -124,14 +190,14 @@
             reverse
           ></v-text-field>
         </v-col>
-      </v-row>
+      </v-row> -->
 
       <v-row dense>
         <v-col cols="12">
           <!-- <div>title</div> -->
           <v-divider />
         </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
+        <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-combobox
             v-model="
               $store.state.organization.organization.localOrInternational
@@ -162,7 +228,7 @@
             label="النطاق الجغرافي"
             reverse
           ></v-combobox>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
@@ -174,15 +240,6 @@
             reverse
           ></v-text-field>
         </v-col>
-        
-      </v-row>
-
-      <v-row dense>
-        <v-col cols="12">
-          <!-- <div>title</div> -->
-          <v-divider />
-        </v-col>
-        
         <v-col cols="12" sm="6" md="6" lg="4">
           <v-file-input
             v-model="$store.state.organization.logo"
@@ -204,6 +261,36 @@
         <v-col cols="12" sm="6" md="6" lg="4">
           <Section20 />
         </v-col>
+        
+      </v-row>
+
+      <v-row dense>
+        <v-col cols="12">
+          <!-- <div>title</div> -->
+          <v-divider />
+        </v-col>
+        
+        <!-- <v-col cols="12" sm="6" md="6" lg="4">
+          <v-file-input
+            v-model="$store.state.organization.logo"
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            type="file"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="اختر الشعار"
+            prepend-icon="mdi-camera"
+            label="شعار المنظمة"
+            outlined
+            :rules="imageRules"
+            dense
+            reverse
+            required
+            @change="uploadImage"
+          >
+          </v-file-input>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <Section20 />
+        </v-col> -->
       </v-row>
 
     </v-form>

@@ -3,6 +3,7 @@
     <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
       <v-card class="rounded-br-xl rounded-bl-xl">
         <v-card-title>
+          
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -15,7 +16,7 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :items="$store.state.organization.organizations"
+          :items="search.length > 0 ? $store.state.organization.organizations : []"
           :search="search"
           sort-by="calories"
           class="elevation-1 rounded-br-xl rounded-bl-xl"
@@ -33,6 +34,10 @@
               <v-spacer></v-spacer>
   
             </v-toolbar>
+            
+          </template>
+          <template v-slot:item.lastRenewalDate="{ item }">
+            {{ filterDate(item.lastRenewalDate) }}
           </template>
 
         </v-data-table>
@@ -53,7 +58,8 @@ export default {
       { text: "إيميل المؤسسة", align: "center", sortable: false, value: "email" },
 
       { text: "هاتف المؤسسة", align: "center", sortable: false, value: "phone" },
-      { text: "المنطقة الجغرافية", align: "center", sortable: false, value: "mapArea.name" },
+      { text: "تاريخ التأسيس", align: "center", sortable: false, value: "lastRenewalDate" },
+      { text: "النطاق الجغرافي", align: "center", sortable: false, value: "mapArea.name" },
       { text: "نوع المؤسسة", align: "center", sortable: false, value: "type" },
 
       {
@@ -164,6 +170,9 @@ export default {
     printOrg() {
       this.$router.push("/printorganization");
     },
+    filterDate (lastRenewalDate){
+      return day(lastRenewalDate).format("YYYY-MM-DD");
+    }
   },
 };
 </script>

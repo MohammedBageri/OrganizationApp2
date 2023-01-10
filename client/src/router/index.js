@@ -61,6 +61,14 @@ const routes = [
       title: "إضافة نشاط جديد"
     },
     component: () => import('../views/ControlPanel/NewActivity.vue')
+  },
+  {
+    path: '/renew-activition',
+    name: 'RenewActivition',
+    meta: {
+      title: "تجديد الترخيص"
+    },
+    component: () => import('../views/ControlPanel/RenewActivition.vue')
   }
   // {
   //   path: '/home',
