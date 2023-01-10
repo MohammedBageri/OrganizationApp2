@@ -67,8 +67,8 @@
     <!-- <Important :dialog.sync="dialog" /> -->
   </div>
 </template>
-
-<script>
+  
+  <script>
 //   import Important from '../components/Important.vue'
 export default {
   data: () => ({
@@ -92,11 +92,7 @@ export default {
       //   icon: "mdi-archive-plus-outline",
       //   link: "/new-activity-requist",
       // },
-      {
-        title: "تجديد الترخيص",
-        icon: "mdi-autorenew",
-        link: "/renew-activition",
-      },
+      { title: 'تجديد الترخيص', icon: 'mdi-autorenew', link: "/renew-activition" ,},
       // { title: 'المنظمات غير مسجلة', icon: 'mdi-account-group-outline', link: "" },
       // {
       //   title: "طلب تجديد مزاولة النشاط",
@@ -152,8 +148,8 @@ export default {
   },
 };
 </script>
-
-<style scoped>
+  
+  <style scoped>
 .border {
   background-color: #14425a;
 }

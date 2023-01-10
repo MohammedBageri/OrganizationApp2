@@ -9,11 +9,16 @@
           <div>الادارة العامة للجمعيات والاتحادات</div>
         </v-col>
         <v-col cols="4" class="mr-16">
-          <v-img src="/Yemen.png" max-height="100" max-width="100"></v-img>
+          <v-img
+          src="../../../src/assets/Yemen.png"
+          max-height="100"
+          max-width="100"
+        ></v-img>
         </v-col>
         <v-col cols="2">التاريخ...............</v-col>
       </v-row>
-      <v-divider></v-divider>
+      <v-divider ></v-divider>
+      
     </v-container>
   </div>
 </template>

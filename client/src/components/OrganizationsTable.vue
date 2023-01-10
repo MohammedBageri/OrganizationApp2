@@ -56,7 +56,6 @@ export default {
     search: "",
     headers: [
       { text: "إيميل المؤسسة", align: "center", sortable: false, value: "email" },
-
       { text: "هاتف المؤسسة", align: "center", sortable: false, value: "phone" },
       { text: "تاريخ التأسيس", align: "center", sortable: false, value: "lastRenewalDate" },
       { text: "النطاق الجغرافي", align: "center", sortable: false, value: "mapArea.name" },

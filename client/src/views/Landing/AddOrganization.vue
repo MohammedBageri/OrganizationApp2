@@ -196,7 +196,7 @@
     </v-row>
   </AppLayout>
 </template>
-
+  
 <script>
 import AppLayout from "../../layouts/AppLayout.vue";
 import Section1 from "../../components/OrganizationSections/Section1.vue";
