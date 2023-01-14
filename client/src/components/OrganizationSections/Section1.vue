@@ -165,11 +165,7 @@
         <v-col cols="12" sm="6" md="6" lg="4">
           <v-combobox
             v-model="$store.state.organization.organization.mapArea"
-            class="
-              text-right
-              selection
-              rounded-bl-xl rounded-tl-xl rounded-tr-xl
-            "
+            class="text-right selection rounded-bl-xl rounded-tl-xl rounded-tr-xl"
             item-text="name"
             item-value="_id"
             outlined
@@ -193,7 +189,7 @@
         </v-col>
 
         <v-col cols="12" sm="6" md="6" lg="4">
-            <!-- :rules="imageRules" -->
+          <!-- :rules="imageRules" -->
           <v-file-input
             v-model="$store.state.organization.image"
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
@@ -204,20 +200,26 @@
             label="شعار المنظمة"
             outlined
             dense
-          show-size
+            show-size
             reverse
             required
             @change="uploadImage"
           >
           </v-file-input>
-          <span style="margin-right: 100px;"><a class="my-0" :href="showLogo" target="_blank">معاينةالصورة</a></span>
+          <span style="margin-right: 100px"
+            ><a class="my-0" :href="showLogo" target="_blank"
+              >معاينةالصورة</a
+            ></span
+          >
         </v-col>
         <v-col cols="12" sm="6" md="6" lg="4">
           <Section20 />
-        <span style="margin-right: 100px;"><a :href="showOrganizationalChart" target="_blank">تحميل المرفق</a></span>
+          <span style="margin-right: 100px"
+            ><a :href="showOrganizationalChart" target="_blank"
+              >تحميل المرفق</a
+            ></span
+          >
         </v-col>
-       
-
       </v-row>
 
       <v-row dense>
@@ -257,7 +259,6 @@
             reverse
           ></v-combobox>
         </v-col> -->
-        
 
         <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-file-input
@@ -280,7 +281,6 @@
         <v-col cols="12" sm="6" md="6" lg="4">
           <Section20 />
         </v-col> -->
-        
       </v-row>
 
       <!-- <v-row dense>
@@ -311,54 +311,62 @@
           <Section20 />
         </v-col>
       </v-row> -->
-
     </v-form>
   </v-container>
 </template>
 
-
 <script>
-import Section20 from '../OrganizationSections/‏‏‏Section20.vue'
+import Section20 from "../OrganizationSections/‏‏‏Section20.vue";
 export default {
   components: {
-    Section20
+    Section20,
   },
   data: () => ({
     textRules: [(v) => !!v || "الحقل مطلوب"],
-    logo:[],
+    logo: [],
     imageRules: [
       (v) => !v || v.size < 100000 || "الشعار لابد ان يكون اقل من 1 ميجا",
     ],
     items: ["محلية", "دولية"],
     typeItems: ["مؤسسة", "جمعية", "منظمة"],
     image: null,
-    showLogo:"",
-    showOrganizationalChart : ""
+    showLogo: "",
+    showOrganizationalChart: "",
   }),
   async created() {
     await this.$store.dispatch("getStates"),
       await this.$store.dispatch("getCities");
-      await this.$store.dispatch("getMapAreas");
-      this.showLogo =  await "http://localhost:3000/"+ this.$store.state.organization.organization.logo.substring(7)
-      this.showOrganizationalChart =  await "http://localhost:3000/"+ this.$store.state.organization.organization.OrganizationalChart.substring(7)
+    await this.$store.dispatch("getMapAreas");
+    this.showLogo =
+      (await import.meta.env.VITE_API) +
+      "/" +
+      this.$store.state.organization.organization.logo.substring(7);
+    this.showOrganizationalChart =
+      (await import.meta.env.VITE_API) +
+      "/" +
+      this.$store.state.organization.organization.OrganizationalChart.substring(
+        7
+      );
   },
-  mounted(){
-    this.$store.state.sectionForm =  this.$refs.section1;
-    this.files()
+  mounted() {
+    this.$store.state.sectionForm = this.$refs.section1;
+    this.files();
   },
   methods: {
-    uploadImage(){
-      this.logo.push(event.target.files[0])
-      console.log(event.target.files[0])
-      this.$store.state.organization.organization.logo = this.logo
+    uploadImage() {
+      this.logo.push(event.target.files[0]);
+      console.log(event.target.files[0]);
+      this.$store.state.organization.organization.logo = this.logo;
       console.log(this.logo);
     },
-    async files(){
-
-       this.x = await "http://localhost:3000/"+ this.$store.state.organization.organization.logo.substring(7)
-      console.log(this.x,'sss')
-      return this.x
-    }
+    async files() {
+      this.x =
+        (await import.meta.env.VITE_API) +
+        "/" +
+        this.$store.state.organization.organization.logo.substring(7);
+      console.log(this.x, "sss");
+      return this.x;
+    },
   },
 };
 </script>

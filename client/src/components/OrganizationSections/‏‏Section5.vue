@@ -119,7 +119,7 @@
           :headers="headers"
           :hide-default-footer="true"
         >
-        <!-- <template v-slot:item.founderUpload="props">
+          <!-- <template v-slot:item.founderUpload="props">
           
         <v-edit-dialog
           :return-value.sync="props.item.iron"
@@ -158,7 +158,6 @@
   </v-container>
 </template>
 
-
 <script>
 import dayjs from "dayjs";
 import axios from "axios";
@@ -188,22 +187,21 @@ export default {
     founderUpload: "",
   }),
   computed: {
-    founderItems () {
-      return this.$store.state.organization.organization.founder
+    founderItems() {
+      return this.$store.state.organization.organization.founder;
     },
-    async file(){
-
-      return await "http://localhost:3000/"+ this.founderItems.founderUpload
-    }
+    async file() {
+      return (
+        (await import.meta.env.VITE_API) + "/" + this.founderItems.founderUpload
+      );
+    },
   },
   methods: {
     editItem(item) {
-      this.editedIndex =
-        this.founderItems.indexOf(item);
+      this.editedIndex = this.founderItems.indexOf(item);
 
       // (this._id = item._id),
-      const subItem =
-        this.founderItems[this.editedIndex];
+      const subItem = this.founderItems[this.editedIndex];
       const founderId = subItem._id;
       this._id = `${founderId}`;
       this.name = item.name;
@@ -214,7 +212,6 @@ export default {
       this.gualification = item.gualification;
       this.phone = item.phone;
       // (this.founderUpload = item.upload[0]);
-      
     },
     async editFounders() {
       const formData = new FormData();
@@ -226,7 +223,7 @@ export default {
       formData.append("job", this.job);
       formData.append("gualification", this.gualification);
       formData.append("phone", this.phone);
-      formData.append("founderUpload", this.upload[0])
+      formData.append("founderUpload", this.upload[0]);
       const id = this._id;
 
       await axios
@@ -239,7 +236,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.founder;
           const obj = data[this.editedIndex];
-          this.founderItems.splice(this.editedIndex, 1, obj)
+          this.founderItems.splice(this.editedIndex, 1, obj);
         })
         .catch((err) => {
           console.log(err);
@@ -279,9 +276,9 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save();
       } else {
-        this.editFounders()
+        this.editFounders();
         // Object.assign(
-         
+
         //   // this.$store.state.organization.organization.founder[this.editedIndex],
         //   // {
 
@@ -315,5 +312,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

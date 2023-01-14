@@ -74,17 +74,17 @@ export default {
  }), 
 
 //  async created (item){
-//   this.founderChart =  await "http://localhost:3000/"+ item.substring(7)
+//   this.founderChart =  await import.meta.env.VITE_API + "/" + item.substring(7)
 //   console.log(this.founderChart);
 
 //  }
 methods:{
   founderFile(item){
 
-    this.founderChart = "http://localhost:3000/"+ item.founderUpload.substring(7)
+    this.founderChart = import.meta.env.VITE_API + "/" + item.founderUpload.substring(7)
   },
   boardOfTrusteFile(item){
-    this.boardOfTrusteChart = "http://localhost:3000/"+ item.BoardOfTrusteUpload.substring(7)
+    this.boardOfTrusteChart = import.meta.env.VITE_API + "/" + item.BoardOfTrusteUpload.substring(7)
   }
 }
 }

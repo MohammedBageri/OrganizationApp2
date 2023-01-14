@@ -23,8 +23,11 @@
         <td>{{ item.countMale }}</td>
         <td>{{ item.countFemale }}</td>
         <td>{{ item.note }}</td>
-        <td><span @click="standingCommitteFile(item)"><a :href="standingCommitteChart" target="_blank">معاينة</a></span></td>
-
+        <td>
+          <span @click="standingCommitteFile(item)"
+            ><a :href="standingCommitteChart" target="_blank">معاينة</a></span
+          >
+        </td>
       </tr>
     </table>
 
@@ -60,8 +63,11 @@
         <td>{{ item.executionPlace }}</td>
         <td>{{ item.executionTime }}</td>
         <td>{{ item.costProject }}</td>
-        <td><span @click="projectsByPeopleFile(item)"><a :href="projectsByPeopleChart" target="_blank">معاينة</a></span></td>
-
+        <td>
+          <span @click="projectsByPeopleFile(item)"
+            ><a :href="projectsByPeopleChart" target="_blank">معاينة</a></span
+          >
+        </td>
       </tr>
     </table>
   </div>
@@ -70,19 +76,24 @@
 export default {
   data: () => ({
     standingCommitteChart: "",
-    projectsByPeopleChart: ""
+    projectsByPeopleChart: "",
   }),
   methods: {
-    standingCommitteFile (item){
-      console.log(item,'sss')
-      this.standingCommitteChart = "http://localhost:3000/"+ item.standingCommitteUpload.substring(7)
+    standingCommitteFile(item) {
+      console.log(item, "sss");
+      this.standingCommitteChart =
+        import.meta.env.VITE_API +
+        "/" +
+        item.standingCommitteUpload.substring(7);
     },
-    projectsByPeopleFile (item) {
-      this.projectsByPeopleChart = "http://localhost:3000/"+ item.projectsByPeopleUpload.substring(7)
-    }
-    
-  }
-}
+    projectsByPeopleFile(item) {
+      this.projectsByPeopleChart =
+        import.meta.env.VITE_API +
+        "/" +
+        item.projectsByPeopleUpload.substring(7);
+    },
+  },
+};
 </script>
 <style scoped>
 table,

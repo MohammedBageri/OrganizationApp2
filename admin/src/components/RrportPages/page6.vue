@@ -1,6 +1,6 @@
 <template>
-    <div dir="rtl">
-        <v-row>
+  <div dir="rtl">
+    <v-row>
       <v-col cols="12" class="text-right">
         2- الانشطة والمشاريع الممولة من أشخاص او جهات او منظمات عربية/اجنبيه
       </v-col>
@@ -17,29 +17,30 @@
         <th style="width: 10%">المرفقات</th>
       </tr>
       <tr
-        v-for="item in $store.state.organization.organization.activitiesAndProjectsByOthersOrganization"
-        :key="item._id" 
-        >
+        v-for="item in $store.state.organization.organization
+          .activitiesAndProjectsByOthersOrganization"
+        :key="item._id"
+      >
         <td style="width: 20%">{{ item.name }}</td>
         <td style="width: 20%">{{ item.fundingSourceAndNationality }}</td>
         <td>{{ item.numberBeneficiaries }}</td>
         <td>{{ item.executionPlace }}</td>
         <td>{{ item.executionTime }}</td>
         <td>{{ item.costProject }}</td>
-        <td><span @click="activitiesFile(item)"><a :href="activitiesChart" target="_blank">معاينة</a></span></td>
+        <td>
+          <span @click="activitiesFile(item)"
+            ><a :href="activitiesChart" target="_blank">معاينة</a></span
+          >
+        </td>
       </tr>
     </table>
-    <br>
+    <br />
 
     <v-row>
-      <v-col cols="12" class="text-right">
-        رابعاً البيانات المالية</v-col
-      >
+      <v-col cols="12" class="text-right"> رابعاً البيانات المالية</v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="text-right">
-        1- الحسابات البنكية
-      </v-col>
+      <v-col cols="12" class="text-right"> 1- الحسابات البنكية </v-col>
     </v-row>
 
     <table style="width: 100%">
@@ -53,17 +54,21 @@
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.bankAccount"
-        :key="item._id" >
+        :key="item._id"
+      >
         <td style="width: 20%">{{ item.bankName }}</td>
         <td style="width: 20%">{{ item.address }}</td>
         <td>{{ item.numberAccount }}</td>
         <td>{{ item.currency }}</td>
         <td>{{ item.balance }}</td>
-        <td><span @click="bankAccountFile(item)"><a :href="bankAccountChart" target="_blank">معاينة</a></span></td>
-
+        <td>
+          <span @click="bankAccountFile(item)"
+            ><a :href="bankAccountChart" target="_blank">معاينة</a></span
+          >
+        </td>
       </tr>
     </table>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -71,18 +76,18 @@ export default {
   data: () => ({
     activitiesChart: "",
     bankAccountChart: "",
-    
   }),
-  methods:{
+  methods: {
     activitiesFile(item) {
-      this.standingCommitteChart = "http://localhost:3000/"+ item.activityUpload.substring(7)
-
+      this.standingCommitteChart =
+        import.meta.env.VITE_API + "/" + item.activityUpload.substring(7);
     },
-    bankAccountFile(item){
-      this.standingCommitteChart = "http://localhost:3000/"+ item.bankUpload.substring(7)
-    }
-  }
-}
+    bankAccountFile(item) {
+      this.standingCommitteChart =
+        import.meta.env.VITE_API + "/" + item.bankUpload.substring(7);
+    },
+  },
+};
 </script>
 
 <style scoped>
