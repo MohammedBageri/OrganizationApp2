@@ -82,13 +82,13 @@ export default {
     standingCommitteFile(item) {
       console.log(item, "sss");
       this.standingCommitteChart =
-        import.meta.env.VITE_API +
+        import.meta.env.VITE_API_URL +
         "/" +
         item.standingCommitteUpload.substring(7);
     },
     projectsByPeopleFile(item) {
       this.projectsByPeopleChart =
-        import.meta.env.VITE_API +
+        import.meta.env.VITE_API_URL +
         "/" +
         item.projectsByPeopleUpload.substring(7);
     },

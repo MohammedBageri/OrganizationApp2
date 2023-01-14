@@ -71,13 +71,13 @@ export default {
   methods: {
     organizationGoalFile(item) {
       this.organizationGoalChart =
-        import.meta.env.VITE_API +
+        import.meta.env.VITE_API_URL +
         "/" +
         item.organizationGoalUpload.substring(7);
     },
     organizationRegulationFile(item) {
       this.organizationRegulationChart =
-        import.meta.env.VITE_API +
+        import.meta.env.VITE_API_URL +
         "/" +
         item.organizationRegulationUpload.substring(7);
     },

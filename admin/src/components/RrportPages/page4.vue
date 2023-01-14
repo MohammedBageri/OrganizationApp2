@@ -146,7 +146,7 @@ export default {
   methods: {
     oversightCommitteFile(item) {
       this.oversightCommitteChart =
-        import.meta.env.VITE_API +
+        import.meta.env.VITE_API_URL +
         "/" +
         item.oversightCommitteUpload.substring(7);
     },

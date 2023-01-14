@@ -338,11 +338,11 @@ export default {
       await this.$store.dispatch("getCities");
     await this.$store.dispatch("getMapAreas");
     this.showLogo =
-      (await import.meta.env.VITE_API) +
+      (await import.meta.env.VITE_API_URL) +
       "/" +
       this.$store.state.organization.organization.logo.substring(7);
     this.showOrganizationalChart =
-      (await import.meta.env.VITE_API) +
+      (await import.meta.env.VITE_API_URL) +
       "/" +
       this.$store.state.organization.organization.OrganizationalChart.substring(
         7
@@ -361,7 +361,7 @@ export default {
     },
     async files() {
       this.x =
-        (await import.meta.env.VITE_API) +
+        (await import.meta.env.VITE_API_URL) +
         "/" +
         this.$store.state.organization.organization.logo.substring(7);
       console.log(this.x, "sss");

@@ -192,7 +192,9 @@ export default {
     },
     async file() {
       return (
-        (await import.meta.env.VITE_API) + "/" + this.founderItems.founderUpload
+        (await import.meta.env.VITE_API_URL) +
+        "/" +
+        this.founderItems.founderUpload
       );
     },
   },

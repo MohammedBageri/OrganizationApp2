@@ -80,11 +80,11 @@ export default {
   methods: {
     activitiesFile(item) {
       this.standingCommitteChart =
-        import.meta.env.VITE_API + "/" + item.activityUpload.substring(7);
+        import.meta.env.VITE_API_URL + "/" + item.activityUpload.substring(7);
     },
     bankAccountFile(item) {
       this.standingCommitteChart =
-        import.meta.env.VITE_API + "/" + item.bankUpload.substring(7);
+        import.meta.env.VITE_API_URL + "/" + item.bankUpload.substring(7);
     },
   },
 };
