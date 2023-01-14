@@ -40,6 +40,14 @@ const routes = [
     },
     component: () => import('../views/AddOrganizationFiles.vue')
   },
+  {
+    name: 'EditOrganization',
+    path: '/organization/edit/:id',
+    meta: {
+      title: 'تعديل المنظمة'
+    },
+    component: () => import ('../views/EditOrganization.vue')
+  },
 
   {
     path: '/organizations',

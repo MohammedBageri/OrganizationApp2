@@ -37,16 +37,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="this.$store.state.organization.organization.organizationGoal"
+          :items="organizationGoalItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -64,7 +64,7 @@ export default {
       { text: "أهداف المؤسسة ", value: "goal" },
       { text: "مرفقات", value: "organizationGoalUpload"},
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -72,17 +72,48 @@ export default {
     organizationGoalUpload: "",
 
   }),
+  computed: {
+    organizationGoalItem (){
+      return  this.$store.state.organization.organization.organizationGoal
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.organizationGoal.indexOf(
+        this.organizationGoalItem.indexOf(
           item
         );
-
-        this._id= `${this.editedIndex}`,
+        const subItem =
+        this.organizationGoalItem[this.editedIndex];
+      const organizationGoalId = subItem._id;
+        this._id= `${organizationGoalId}`,
        (this.goal = item.goal);
     },
+    async editOrganizationGoalItem () {
+      const formData = new FormData();
+      formData.append("goal", this.goal)
+      formData.append("organizationGoalUpload", this.goalFile[0]);
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_organizationGoal/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.organizationGoal
+          const obj = data[this.editedIndex]
+          this.organizationGoalItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },  
     async save(){
       const formData = new FormData();
       formData.append("goal", this.goal)
@@ -101,7 +132,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.organizationGoal
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.organizationGoal.push(obj)
+          this.organizationGoalItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -114,14 +145,15 @@ export default {
         this.save();
 
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.organizationGoal[
-            this.editedIndex
-          ],
-          {
-            goal: this.goal,
-          }
-        );
+        this.editOrganizationGoalItem()
+        // Object.assign(
+        //   this.organizationGoalItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     goal: this.goal,
+        //   }
+        // );
       }
 
       (this._id = "");

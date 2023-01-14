@@ -123,9 +123,9 @@ export default {
   },
 
   methods: {
-    async complate(item) {
-      const id = item._id;
-      this.$router.push(`/organization/create/${id}`);
+    async complate(item){
+      const id = item._id
+      this.$router.push(`/organization/edit/${id}`);
     },
     async editItem(item) {
       this.$store.state.organization.organization = Object.assign({}, item);
@@ -188,7 +188,7 @@ export default {
           type: theBlob.type,
         });
       }
-      this.$router.push("/organization/create");
+      this.$router.push("/organization/edit");
     },
 
     deleteItem(item) {

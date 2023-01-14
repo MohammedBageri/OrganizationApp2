@@ -155,6 +155,98 @@ const newOrganizationGoal = async (req,res)=>{
   
   res.status(StatusCodes.CREATED).json({ result });
 }
+//---------------------------------------------------
+
+const updateNewActivities = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewActivities(id,req);
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewOrganizationProject = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewOrganizationProject(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewOrganizationRegulation = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewOrganizationRegulation(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewOversightCommitte = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewOversightCommitte(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewPeopleAndSupporting = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewPeopleAndSupporting(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewProjectsByPeople = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewProjectsByPeople(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewRevenue = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewRevenue(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewStandingCommitte = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewStandingCommitte(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewBankAccount = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewBankAccount(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewBoardOfTruste = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewBoardOfTruste(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewExpenditure = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewExpenditure(id,req);
+  
+  res.status(StatusCodes.OK).json({ result });
+}
+const updateNewFounder = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewFounder(id,req);
+  
+  res.status(StatusCodes.CREATED).json({ result });
+}
+
+const updateNewBranche = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewBranche(id,req);
+  
+  res.status(StatusCodes.CREATED).json({ result });
+}
+const updateNewFacilitiesAndCenter = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewFacilitiesAndCenter(id,req);
+  
+  res.status(StatusCodes.CREATED).json({ result });
+}
+const updateNewOrganizationGoal = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewOrganizationGoal(id,req);
+  
+  res.status(StatusCodes.CREATED).json({ result });
+}
 module.exports = {
   getAllOrganizations,
   getSingleOrganization,
@@ -162,6 +254,7 @@ module.exports = {
   createOrganization,
   updateOrganization,
   Counter,
+  updateNewBranche,
   newActivities,
   getOrganizationByEmail,
   newOrganizationProject,
@@ -176,6 +269,21 @@ module.exports = {
   newEmployeeStats,
   newExpenditure,
   newFounder,
-  newOrganizationGoal
+  newOrganizationGoal,
+  updateNewActivities,
+  updateNewOrganizationProject,
+  updateNewOrganizationRegulation,
+  updateNewOversightCommitte,
+  updateNewPeopleAndSupporting,
+  updateNewProjectsByPeople,
+  updateNewRevenue,
+  updateNewStandingCommitte,
+  updateNewBankAccount,
+  updateNewBoardOfTruste,
+  updateNewExpenditure,
+  updateNewFounder,
+  updateNewFacilitiesAndCenter,
+  updateNewOrganizationGoal
+  
 };
 

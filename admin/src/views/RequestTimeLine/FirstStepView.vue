@@ -8,7 +8,7 @@
               <v-row>
                 <v-col cols="6" class="mt-3" sm="4" md="4" lg="2">
                   <v-img
-                    src="../../public/Yemen.png"
+                    src="/Yemen.png"
                     max-height="150"
                     max-width="150"
                   ></v-img>
@@ -38,24 +38,21 @@
     </v-container>
   </AppLayout>
 </template>
-  
-  <script>
+
+<script>
 import AppLayout from "../../layouts/AppLayout.vue";
 import First from "../../components/Requests/FirstStep.vue";
 export default {
   components: {
     AppLayout,
-    First
-},
-  data: () => ({
-  }),
-  methods: {
+    First,
   },
-  
+  data: () => ({}),
+  methods: {},
 };
 </script>
-  
-  <style >
+
+<style>
 .content-row {
   width: 90%;
 }

@@ -97,17 +97,7 @@ const orderUnderProccessing = async (id) => {
   const generateUsernane = generateFromEmail(organization.email, 3);
   const generatedPassword = generateFromEmail(organization.email, 5);
 
-  await User.create({
-    username: generateUsernane,
-    email: organization.email,
-    password: generatedPassword,
-    role: roles.USER,
-    isVerified: true,
-    verified: Date.now(),
-    verificationToken: '',
-  });
   const content = `<h4> Your order under proccessing </h4>`;
-
   const messageEn = `${content} <p> Information account <br>
    email:${organization.email},password:${generatedPassword}</p> `;
 
@@ -117,6 +107,17 @@ const orderUnderProccessing = async (id) => {
     messageEn,
     messageAr
   });
+  
+  await User.create({
+    username: generateUsernane,
+    email: organization.email,
+    password: generatedPassword,
+    role: roles.USER,
+    isVerified: true,
+    verified: Date.now(),
+    verificationToken: '',
+  });
+  
   order.status = 'قيد التنفيذ';
 
   return await order.save();

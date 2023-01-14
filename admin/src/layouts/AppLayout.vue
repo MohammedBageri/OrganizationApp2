@@ -12,7 +12,7 @@
         </v-toolbar>
       </div>
       <!-- main content -->
-      <div class="grey lighten-4 mt-16 content">
+      <div class="backgroundBody mt-16 content">
         <slot />
       </div>
     </div>
@@ -48,5 +48,8 @@ export default {
   /* .content{
   width: 100%;
 } */
+}
+.backgroundBody{
+  background-color: #178287;
 }
 </style>

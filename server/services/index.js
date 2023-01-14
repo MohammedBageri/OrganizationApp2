@@ -14,10 +14,12 @@ const {
 const {
   getAllOrganizations,
   getSingleOrganization,
+  updateNewBranche,
   deleteOrganization,
   createOrganization,
   updateOrganization,
   getOrganizationByEmail,
+  updateNewFacilitiesAndCenter,
   newActivities,
   newOrganizationProject,
   newOrganizationRegulation,
@@ -31,7 +33,21 @@ const {
   newEmployeeStats,
   newExpenditure,
   newFounder,
-  newOrganizationGoal
+  newOrganizationGoal,
+  updateNewActivities,
+  updateNewOrganizationProject,
+  updateNewOrganizationRegulation,
+  updateNewOversightCommitte,
+  updateNewPeopleAndSupporting,
+  updateNewProjectsByPeople,
+  updateNewRevenue,
+  updateNewStandingCommitte,
+  updateNewBankAccount,
+  updateNewBoardOfTruste,
+  updateNewExpenditure,
+  updateNewFounder,
+  updateNewOrganizationGoal
+ 
 
   
 } = require('./OrganizationService');
@@ -97,7 +113,22 @@ module.exports = {
     newEmployeeStats,
     newExpenditure,
     newFounder,
-    newOrganizationGoal
+    newOrganizationGoal,
+    updateNewActivities,
+    updateNewOrganizationProject,
+    updateNewOrganizationRegulation,
+    updateNewOversightCommitte,
+    updateNewPeopleAndSupporting,
+    updateNewProjectsByPeople,
+    updateNewRevenue,
+    updateNewFacilitiesAndCenter,
+    updateNewStandingCommitte,
+    updateNewBankAccount,
+    updateNewBoardOfTruste,
+    updateNewExpenditure,
+    updateNewFounder,
+    updateNewOrganizationGoal,
+    updateNewBranche
     
   },
   NewsService:{

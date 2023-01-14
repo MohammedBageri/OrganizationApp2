@@ -33,6 +33,7 @@
         </span>
       </template> -->
         </v-file-input>
+
 </template>
   
   
@@ -46,7 +47,7 @@ export default {
       this.OrganizationalChart.push(event.target.files[0])
       console.log("www",event.target.files[0])
       this.$store.state.organization.organization.OrganizationalChart = this.OrganizationalChart
-      console.log(this.OrganizationalChart);
+      console.log(this.OrganizationalChart[0]);
     }
   },
 };

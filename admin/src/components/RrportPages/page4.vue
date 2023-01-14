@@ -11,7 +11,8 @@
         <th style="width: 10%">مكان الميلاد</th>
         <th style="width: 10%">مكان الإقامة الحالي</th>
         <th style="width: 10%">الصفة في المؤسسة</th>
-        <th style="width: 20%">رقم الجوال</th>
+        <th style="width: 10%">رقم الجوال</th>
+        <th style="width: 10%">المرفقات</th>
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.oversightCommitte"
@@ -23,6 +24,8 @@
         <td>{{ item.currentPlace }}</td>
         <td>{{ item.qualification }}</td>
         <td>{{ item.phone }}</td>
+        <td><span @click="oversightCommitteFile(item)"><a :href="oversightCommitteChart" target="_blank">معاينة</a></span></td>
+        <!-- <td></td> -->
       </tr>
     </table>
     <br />
@@ -68,6 +71,20 @@
     </table>
   </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    oversightCommitteChart: "",
+    
+  }),
+  methods: {
+    oversightCommitteFile (item){
+      this.oversightCommitteChart = "http://localhost:3000/"+ item.oversightCommitteUpload.substring(7)
+    }
+  }
+}
+</script>
 
 <style scoped>
 table,

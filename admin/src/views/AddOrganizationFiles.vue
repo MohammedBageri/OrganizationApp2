@@ -7,7 +7,7 @@
             <v-container>
               <v-row>
                 <v-col cols="6" class="mt-3" sm="4" md="4" lg="2">
-                  <v-img src="../../src/assets/Yemen.png" max-height="150" max-width="150"></v-img>
+                  <v-img src="/Yemen.png" max-height="150" max-width="150"></v-img>
                 </v-col>
                 <v-col cols="6" class="mt-5" sm="6" md="6" lg="4">
                   <h3 >وزارة الشئون الإجتماعية و العمل</h3>

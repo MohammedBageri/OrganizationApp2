@@ -173,7 +173,7 @@
       </v-dialog> -->
 
     <v-row justify="center">
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog  v-model="dialog" max-width="500px">
         <v-card>
           <v-card-title class="green lighten-3" dir="rtl">
             <v-icon class="ml-2">mdi-file-document-alert</v-icon>

@@ -103,16 +103,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="$store.state.organization.organization.organizationRegulation"
+          :items="organizationRegulationItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -136,7 +136,7 @@ export default {
       { text: "عدد المواد", value: "numberMaterials" },
       { text: "ملاحظات", value: "note" },
       {text: "المرفقات", value: "organizationRegulationUpload"},
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -148,23 +148,58 @@ export default {
     note: "",
     organizationRegulationUpload: ""
   }),
+  computed: {
+    organizationRegulationItem () {
+      return this.$store.state.organization.organization.organizationRegulation
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.organizationRegulation.indexOf(
+        this.organizationRegulationItem.indexOf(
           item
         );
-
+        const subItem =
+        this.organizationRegulationItem[this.editedIndex];
+      const organizationRegulationId = subItem._id;
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
+      this._id= `${organizationRegulationId}`,
         (this.regulation = item.regulation),
-        (this.isActive = item.isActive),
+        (this.isActive = item.isAvailable),
         (this.numberDoors = item.numberDoors),
         (this.numberLuck = item.numberLuck),
         (this.numberMaterials = item.numberMaterials),
         (this.note = item.note);
         this.organizationRegulationUpload = item.regulationsFile
+    },
+    async editOrganizationRegulationItem (){
+      const formData = new FormData();
+      formData.append("regulation", this.regulation);
+      formData.append("isActive", this.isAvailable);
+      formData.append("numberDoors", this.numberDoors);
+      formData.append("numberLuck", this.numberLuck);
+      formData.append("numberMaterials", this.numberMaterials);
+      formData.append("note", this.note);
+      formData.append("organizationRegulationUpload",this.regulationsFile[0]);
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_organizationRegulation/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.organizationRegulation
+          const obj = data[this.editedIndex]
+          this.organizationRegulationItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     async save()  {
@@ -189,7 +224,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.organizationRegulation
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.organizationRegulation.push(obj)
+          this.organizationRegulationItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -201,19 +236,20 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save();
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.organizationRegulation[
-            this.editedIndex
-          ],
-          {
-            regulation: this.regulation,
-            isAvailable: this.isAvailable,
-            numberDoors: this.numberDoors,
-            numberLuck: this.numberLuck,
-            numberMaterials: this.numberMaterials,
-            note: this.note,
-          }
-        );
+        this.editOrganizationRegulationItem()
+        // Object.assign(
+        //   this.organizationRegulationItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     regulation: this.regulation,
+        //     isAvailable: this.isAvailable,
+        //     numberDoors: this.numberDoors,
+        //     numberLuck: this.numberLuck,
+        //     numberMaterials: this.numberMaterials,
+        //     note: this.note,
+        //   }
+        // );
       }
 
       (this._id = ""),

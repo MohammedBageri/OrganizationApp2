@@ -74,7 +74,7 @@
             >
               mdi-checkbox-marked-circle
             </v-icon>
-            <v-icon small color="red" class="mr-2" @click="(repDialog=true)">
+            <v-icon small color="red" class="mr-2" @click="rejectItem(item)">
               mdi-minus-circle
             </v-icon>
             <v-icon small class="mr-2" @click="openReport(item)">
@@ -97,6 +97,7 @@
             >
             <v-card-text>
               <v-textarea
+                v-model="msg"
                 class="mt-5 text-right"
                 label=".....أكتب سبب الرفض"
                 outlined
@@ -110,7 +111,7 @@
                 class="mb-5 mr-2"
                 outlined
                 color="red"
-                @click="dialog.value = false"
+                @click="sendReport"
                 >إرسال</v-btn
               >
 
@@ -137,6 +138,9 @@ export default {
   data: () => ({
     dialogDelete: false,
     search: "",
+    msg:"",
+    reportId:null,
+    dialog: false,
     repDialog: false,
     headers: [
       {
@@ -188,9 +192,16 @@ export default {
     },
 
     rejectItem(item) {
+      this.reportId = item._id
+      console.log(".....id...",item);
+
       this.repDialog = true;
     },
-    sendReport() {},
+    async sendReport() {
+      console.log("........",this.reportId);
+      await this.$store.dispatch("order/updateOrderNotCompleted", {id: this.reportId, note:this.msg});
+      this.dialog = true
+    },
 
 
     openReport(item) {

@@ -93,7 +93,7 @@ export default {
       { text: "هاتف المؤسسة", value: "organization.phone", sortable: false },
       { text: "حالة الطلب", value: "status", sortable: false },
       {
-        text: "قبول المختص/قبول المدير/رفض/معاينة",
+        text: "رفع السندات",
         value: "actions",
         sortable: false,
       },

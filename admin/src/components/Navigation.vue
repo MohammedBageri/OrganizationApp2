@@ -37,15 +37,17 @@
       <v-divider></v-divider>
 
       <v-list dense nav class="px-0" dir="rtl">
+        <!-- v-show="role(item.roles)" -->
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          v-show="role(item.roles)"
+          
           link
           :to="item.link"
           exact-active-class=" "
           class=""
         >
+        
           <v-list-item-icon dir="rtl" class="mx-0 pl-2">
             <v-icon color="indigo darken-2">{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -83,26 +85,32 @@ export default {
         title: "المنظمات",
         icon: "mdi-office-building",
         link: "/organizations",
-        roles: ['superAdmin', 'manager']
+        // roles: ['superAdmin', 'manager', 'admin']
       },
 
       {
         title: "إضافة منظمة",
         icon: "mdi-bank-plus",
-        link: "/organization/create",
-        roles: ['superAdmin', 'manager', 'admin']
+        link: '/organization/create',
+        // roles: ['superAdmin', 'manager', 'admin']
       },
+      // {
+      //   title: 'تعديل المنطمة',
+      //   icon: 'mdi-application-edit-outline',
+      //   link: '/organization/edit',
+      //   roles: ['superAdmin', 'manager', 'admin']
+      // },
       {
         title: "طلبات قيد المراجعة",
         icon: "mdi-bell-alert-outline",
         link: "/requests-org",
-        roles: ['superAdmin', 'manager', 'admin']
+        // roles: ['superAdmin', 'admin']
       },
       {
         title: "مراجعة الطلبات بعد  المختص",
         icon: "mdi-file-eye-outline",
         link: "/check-request",
-        roles: ['superAdmin', 'manager']
+        // roles: ['superAdmin', 'manager']
       },
       // { title: 'المنظمات مسجلة', icon: 'mdi-account-group-outline', link: "/registered-org" },
       // { title: 'المنظمات غير مسجلة', icon: 'mdi-account-group-outline', link: "" },
@@ -110,13 +118,13 @@ export default {
         title: "تاكيد الدفع ورفع السند",
         icon: "mdi-refresh-auto",
         link: "/payment-oragnization",
-        roles: ['superAdmin', 'admin_2']
+        // roles: ['superAdmin', 'admin_2']
       },
       {
         title: "رفع التصاريح المعتمده",
         icon: "mdi-file-upload-outline",
         link: "/upload-file-verify",
-        roles: ['superAdmin', 'admin_3']
+        // roles: ['superAdmin', 'admin_3']
       },
       // {
       //   title: "طلبات انشطة جديدة قيد المراجعة",
@@ -128,13 +136,13 @@ export default {
         title: "الموقع",
         icon: "mdi-office-building-marker-outline",
         link: "/locations",
-        roles: ['superAdmin']
+        // roles: ['superAdmin']
       },
       { 
         title: "المستخدمين",
         icon: "mdi-account-group",
         link: "/users" ,
-        roles: ['superAdmin']
+        // roles: ['superAdmin']
       }
     ],
   }),

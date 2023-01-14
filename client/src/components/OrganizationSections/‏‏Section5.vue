@@ -115,16 +115,43 @@
     <v-row>
       <v-col cols="12">
         <v-data-table
-          :items="$store.state.organization.organization.founder"
+          :items="founderItems"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+        <!-- <template v-slot:item.founderUpload="props">
+          
+        <v-edit-dialog
+          :return-value.sync="props.item.iron"
+          large
+          persistent
+          @save="save"
+          @cancel="cancel"
+          @open="open"
+          @close="close"
+        >
+          <div>{{ props.item.iron }}</div>
+          <template v-slot:input>
+            <div class="mt-4 text-h6">
+              Update Iron
+            </div>
+            <v-text-field
+              v-model="props.item.iron"
+              :rules="[max25chars]"
+              label="Edit"
+              single-line
+              counter
+              autofocus
+            ></v-text-field>
+          </template>
+        </v-edit-dialog>
+      </template> -->
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -138,7 +165,7 @@ import axios from "axios";
 export default {
   data: () => ({
     founder: [],
-    upload:[],
+    upload: [],
     headers: [
       { text: "الإسم الرباعي", value: "name" },
       { text: "مكان الميلاد", value: "placeOfBirth" },
@@ -148,7 +175,7 @@ export default {
       { text: "المؤهل", value: "gualification" },
       { text: "الهاتف", value: "phone" },
       { text: "المرفق", value: "founderUpload" },
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -160,34 +187,75 @@ export default {
     phone: "",
     founderUpload: "",
   }),
+  computed: {
+    founderItems () {
+      return this.$store.state.organization.organization.founder
+    },
+    async file(){
 
+      return await "http://localhost:3000/"+ this.founderItems.founderUpload
+    }
+  },
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.founder.indexOf(item);
+        this.founderItems.indexOf(item);
 
       // (this._id = item._id),
-      (this._id = `${this.editedIndex}`),
-        (this.name = item.name),
-        (this.placeOfBirth = item.placeOfBirth),
-        (this.dateOfBirth = dayjs(item.dateOfBirth).format("YYYY-MM-DD")),
-        (this.currentPlace = item.currentPlace),
-        (this.job = item.job),
-        (this.gualification = item.gualification),
-        (this.phone = item.phone);
-      (this.founderUpload = item.upload);
+      const subItem =
+        this.founderItems[this.editedIndex];
+      const founderId = subItem._id;
+      this._id = `${founderId}`;
+      this.name = item.name;
+      this.placeOfBirth = item.placeOfBirth;
+      this.dateOfBirth = dayjs(item.dateOfBirth).format("YYYY-MM-DD");
+      this.currentPlace = item.currentPlace;
+      this.job = item.job;
+      this.gualification = item.gualification;
+      this.phone = item.phone;
+      // (this.founderUpload = item.upload[0]);
+      
+    },
+    async editFounders() {
+      const formData = new FormData();
+
+      formData.append("name", this.name);
+      formData.append("placeOfBirth", this.placeOfBirth);
+      formData.append("dateOfBirth", this.dateOfBirth);
+      formData.append("currentPlace", this.currentPlace);
+      formData.append("job", this.job);
+      formData.append("gualification", this.gualification);
+      formData.append("phone", this.phone);
+      formData.append("founderUpload", this.upload[0])
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_founder/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.founder;
+          const obj = data[this.editedIndex];
+          this.founderItems.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async save() {
       const formData = new FormData();
 
-      formData.append("name", this.name)
-      formData.append("placeOfBirth", this.placeOfBirth)
-      formData.append("dateOfBirth", this.dateOfBirth) 
-      formData.append("currentPlace", this.currentPlace)
-      formData.append("job", this.job)  
-      formData.append("gualification", this.gualification)
-      formData.append("phone", this.phone)
-      formData.append("founderUpload", this.upload[0])
+      formData.append("name", this.name);
+      formData.append("placeOfBirth", this.placeOfBirth);
+      formData.append("dateOfBirth", this.dateOfBirth);
+      formData.append("currentPlace", this.currentPlace);
+      formData.append("job", this.job);
+      formData.append("gualification", this.gualification);
+      formData.append("phone", this.phone);
+      formData.append("founderUpload", this.upload[0]);
 
       const id = this.$route.params.id;
 
@@ -199,33 +267,34 @@ export default {
         })
         .then((res) => {
           console.log("res", res);
-          const data = res.data.result.founder
-          const obj = data[data.length - 1]
-          this.$store.state.organization.organization.founder.push(obj)
+          const data = res.data.result.founder;
+          const obj = data[data.length - 1];
+          this.founderItems.push(obj);
         })
         .catch((err) => {
           console.log(err);
         });
-
-
     },
     add() {
       if (this._id == undefined || this._id == "") {
         this.save();
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.founder[this.editedIndex],
-          {
-            name: this.name,
-            placeOfBirth: this.placeOfBirth,
-            dateOfBirth: this.dateOfBirth,
-            currentPlace: this.currentPlace,
-            job: this.job,
-            gualification: this.gualification,
-            phone: this.phone,
-            founderUpload: this.upload
-          }
-        );
+        this.editFounders()
+        // Object.assign(
+         
+        //   // this.$store.state.organization.organization.founder[this.editedIndex],
+        //   // {
+
+        //   //   name: this.name,
+        //   //   placeOfBirth: this.placeOfBirth,
+        //   //   dateOfBirth: this.dateOfBirth,
+        //   //   currentPlace: this.currentPlace,
+        //   //   job: this.job,
+        //   //   gualification: this.gualification,
+        //   //   phone: this.phone,
+        //   //   founderUpload: this.upload[0]
+        //   // }
+        // );
       }
 
       (this._id = ""),
@@ -236,7 +305,7 @@ export default {
         (this.job = ""),
         (this.gualification = ""),
         (this.phone = "");
-        this.founderUpload= ""
+      this.founderUpload = "";
     },
     uploadFile() {
       this.upload.push(event.target.files[0]);

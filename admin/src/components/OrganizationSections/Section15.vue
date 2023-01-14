@@ -68,12 +68,12 @@
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -90,7 +90,7 @@ export default {
       { text: "دائن", value: "credit" },
       { text: "ملاحظة", value: "note" },
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",

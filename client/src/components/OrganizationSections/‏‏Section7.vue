@@ -115,16 +115,16 @@
     <v-row>
       <v-col cols="12">
         <v-data-table
-          :items="$store.state.organization.organization.oversightCommitte"
+          :items="oversightCommitteItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -149,7 +149,7 @@ export default {
       { text: "الهاتف", value: "phone" },
       {text: "المرفقات", value: "oversightCommitteUpload"},
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -161,15 +161,21 @@ export default {
     phone: "",
     oversightCommitteUpload: ""
   }),
+  computed: {
+    oversightCommitteItem(){
+     return  this.$store.state.organization.organization.oversightCommitte
+    }
+  },
 
   methods: {
     editItem(item) {
     this.editedIndex =
-      this.$store.state.organization.organization.oversightCommitte.indexOf(
-        item
-      );
+      this.oversightCommitteItem.indexOf(item);
     // (this._id = item._id),
-    this._id= `${this.editedIndex}`,
+    const subItem =
+        this.oversightCommitteItem[this.editedIndex];
+      const oversightCommitteId = subItem._id;
+    this._id= `${oversightCommitteId}`,
       (this.name = item.name),
       (this.placeOfBirth = item.placeOfBirth),
       (this.dateOfBirth = dayjs(item.dateOfBirth).format("YYYY-MM-DD")),
@@ -177,6 +183,37 @@ export default {
       (this.job = item.job),
       (this.qualification = item.qualification),
       (this.phone = item.phone);
+      // this.oversightCommitteUpload = item.committeeInfoFile[0]
+  },
+  async editOversightCommitte(){
+    const formData = new FormData();
+    formData.append("name", this.name);
+    formData.append('placeOfBirth', this.placeOfBirth);
+    formData.append('dateOfBirth', this.dateOfBirth);
+    formData.append('currentPlace', this.currentPlace);
+    formData.append('job', this.job);
+    formData.append('qualification', this.qualification);
+    formData.append('phone', this.phone);
+    formData.append('oversightCommitteUpload', this.committeeInfoFile[0]);
+
+    const id = this._id;
+    await axios
+        .patch(`/api/Organizations/update_new_oversightCommitte/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.oversightCommitte
+          const obj = data[this.editedIndex];
+          this.oversightCommitteItem.splice(this.editedIndex, 1, obj)
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
   },
   async save(){
     const formData = new FormData();
@@ -200,7 +237,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.oversightCommitte
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.oversightCommitte.push(obj)
+          this.oversightCommitteItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -213,20 +250,21 @@ export default {
 
 
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.oversightCommitte[
-            this.editedIndex
-          ],
-          {
-            name: this.name,
-            placeOfBirth: this.placeOfBirth,
-            dateOfBirth: this.dateOfBirth,
-            currentPlace: this.currentPlace,
-            job: this.job,
-            qualification: this.qualification,
-            phone: this.phone,
-          }
-        );
+        this.editOversightCommitte()
+        // Object.assign(
+        //   oversightCommitteItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     name: this.name,
+        //     placeOfBirth: this.placeOfBirth,
+        //     dateOfBirth: this.dateOfBirth,
+        //     currentPlace: this.currentPlace,
+        //     job: this.job,
+        //     qualification: this.qualification,
+        //     phone: this.phone,
+        //   }
+        // );
       }
 
       (this._id = ""),

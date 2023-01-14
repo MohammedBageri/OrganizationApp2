@@ -97,16 +97,16 @@
     <v-row>
       <v-col cols="12">
         <v-data-table
-          :items="$store.state.organization.organization.projectsByPeople"
+          :items="projectsByPeopleItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -129,7 +129,7 @@ export default {
       { text: "تكلفة المشروع", value: "costProject" },
       { text: "المرفقات", value: "projectsByPeopleUpload"},
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -140,22 +140,59 @@ export default {
     costProject: "",
     projectsByPeopleUpload: ""
   }),
+  computed: {
+    projectsByPeopleItem(){
+      return   this.$store.state.organization.organization.projectsByPeople
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.projectsByPeople.indexOf(
+        this.projectsByPeopleItem.indexOf(
           item
         );
-
+        const subItem =
+        this.projectsByPeopleItem[this.editedIndex];
+      const projectsByPeopleId = subItem._id;
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
+      this._id= `${projectsByPeopleId}`,
         (this.name = item.name),
         (this.fundingSource = item.fundingSource),
         (this.beneficiaries = item.beneficiaries),
         (this.executionPlace = item.executionPlace),
         (this.executionTime = item.executionTime),
         (this.costProject = item.costProject);
+    },
+    async editProjectsByPeopleItem(){
+      const formData = new FormData()
+
+      formData.append("name", this.name);
+      formData.append("fundingSource", this.fundingSource);
+      formData.append("beneficiaries", this.beneficiaries);
+      formData.append("executionPlace", this.executionPlace);
+      formData.append("executionTime", this.executionTime);
+      formData.append("costProject", this.costProject)
+      formData.append("projectsByPeopleUpload", this.projectFile[0])
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_projectsByPeople/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.projectsByPeople
+          const obj = data[this.editedIndex]
+          this.projectsByPeopleItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
     async save(){
       const formData = new FormData()
@@ -180,7 +217,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.projectsByPeople
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.projectsByPeople.push(obj)
+          this.projectsByPeopleItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -191,19 +228,20 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save()
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.projectsByPeople[
-            this.editedIndex
-          ],
-          {
-            name: this.name,
-            fundingSource: this.fundingSource,
-            beneficiaries: this.beneficiaries,
-            executionPlace: this.executionPlace,
-            executionTime: this.executionTime,
-            costProject: this.costProject,
-          }
-        );
+        this.editProjectsByPeopleItem()
+        // Object.assign(
+        //   this.projectsByPeopleItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     name: this.name,
+        //     fundingSource: this.fundingSource,
+        //     beneficiaries: this.beneficiaries,
+        //     executionPlace: this.executionPlace,
+        //     executionTime: this.executionTime,
+        //     costProject: this.costProject,
+        //   }
+        // );
       }
 
       (this._id = ""),

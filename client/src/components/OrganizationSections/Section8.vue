@@ -125,7 +125,9 @@
         ></v-file-input>
         </v-col>
       </v-row>
-      
+      <v-btn color="green darken-4" class="white--text" @click="save">
+      إضافة
+    </v-btn>
     </v-container>
   </template>
   

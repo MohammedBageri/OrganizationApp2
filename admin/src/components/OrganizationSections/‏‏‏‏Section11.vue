@@ -100,18 +100,17 @@
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
           :items="
-            $store.state.organization.organization
-              .activitiesAndProjectsByOthersOrganization
+           activitiesAndProjectsItem
           "
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -133,7 +132,7 @@ export default {
       { text: "فترة التنفذ", value: "executionTime" },
       { text: "تكلفة المشروع", value: "costProject" },
       {text: "المرفقات", value: "activityUpload"},
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -145,22 +144,60 @@ export default {
     costProject: "",
     activityUpload: ""
   }),
+  computed: {
+    activitiesAndProjectsItem() {
+      return this.$store.state.organization.organization.activitiesAndProjectsByOthersOrganization
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.activitiesAndProjectsByOthersOrganization.indexOf(
+        this.activitiesAndProjectsItem.indexOf(
           item
         );
 
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
+      const subItem =
+        this.activitiesAndProjectsItem[this.editedIndex];
+      const activitiesAndProjectsId = subItem._id;
+      this._id= `${activitiesAndProjectsId}`,
         (this.name = item.name),
         (this.fundingSourceAndNationality = item.fundingSourceAndNationality),
         (this.executionPlace = item.executionPlace),
         (this.numberBeneficiaries = item.numberBeneficiaries),
         (this.executionTime = item.executionTime),
         (this.costProject = item.costProject);
+    },
+    async editactivitiesItem(){
+
+      const formData = new FormData();
+      formData.append("name", this.name);
+      formData.append("fundingSourceAndNationality", this.fundingSourceAndNationality);
+      formData.append("executionPlace", this.executionPlace);
+      formData.append("numberBeneficiaries", this.numberBeneficiaries);
+      formData.append("executionTime", this.executionTime);
+      formData.append("costProject", this.costProject);
+      formData.append("activityUpload", this.activityFile[0])
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_activity/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.activitiesAndProjectsByOthersOrganization
+          const obj = data[this.editedIndex]
+          this.activitiesAndProjectsItem.splice(this.editedIndex,1 , obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
     async save() {
       const formData = new FormData();
@@ -184,7 +221,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.activitiesAndProjectsByOthersOrganization
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.activitiesAndProjectsByOthersOrganization.push(obj)
+          this.activitiesAndProjectsItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -195,18 +232,19 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save();
       } else {
-        Object.assign(
-          this.$store.state.organization.organization
-            .activitiesAndProjectsByOthersOrganization[this.editedIndex],
-          {
-            name: this.name,
-            fundingSourceAndNationality: this.fundingSourceAndNationality,
-            executionPlace: this.executionPlace,
-            numberBeneficiaries: this.numberBeneficiaries,
-            executionTime: this.executionTime,
-            costProject: this.costProject,
-          }
-        );
+        this.editactivitiesItem()
+        // Object.assign(
+        //   this.$store.state.organization.organization
+        //     .activitiesAndProjectsByOthersOrganization[this.editedIndex],
+        //   {
+        //     name: this.name,
+        //     fundingSourceAndNationality: this.fundingSourceAndNationality,
+        //     executionPlace: this.executionPlace,
+        //     numberBeneficiaries: this.numberBeneficiaries,
+        //     executionTime: this.executionTime,
+        //     costProject: this.costProject,
+        //   }
+        // );
       }
 
       (this._id = ""),

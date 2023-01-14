@@ -48,16 +48,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="$store.state.organization.organization.peopleAndSupporting"
+          :items="peopleAndSupportingItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -76,7 +76,7 @@ export default {
       { text: "جنسية الجهة", value: "nationality" },
       { text: "المرفقات", value: "peopleAndSupportingStationUpload" },
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -84,18 +84,48 @@ export default {
     nationality: "",
     peopleAndSupportingStationUpload: "",
   }),
+  computed: {
+    peopleAndSupportingItem (){
+      return this.$store.state.organization.organization.peopleAndSupporting
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.peopleAndSupporting.indexOf(
-          item
-        );
+        this.peopleAndSupportingItem.indexOf(item);
 
       // (this._id = item._id),
-      (this._id = `${this.editedIndex}`),
+      const subItem =
+        this.peopleAndSupportingItem[this.editedIndex];
+      const peopleAndSupportingId = subItem._id;
+      (this._id = `${peopleAndSupportingId}`),
         (this.nameSupportingStation = item.nameSupportingStation),
         (this.nationality = item.nationality);
+    },
+    async editPeopleAndSupportingItem (){
+      const formData = new FormData();
+      formData.append("nameSupportingStation", this.nameSupportingStation);
+      formData.append("nationality", this.nationality);
+      formData.append("peopleAndSupportingStationUpload", this.suportUpload[0]);
+
+      const id =  this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_peopleAndSupporting/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.peopleAndSupporting
+          const obj = data[this.editedIndex]
+          this.peopleAndSupportingItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     async save() {
@@ -116,7 +146,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.peopleAndSupporting
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.peopleAndSupporting.push(obj)
+          this.peopleAndSupportingItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -127,30 +157,31 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save();
       } else {
-        const id =  this.$route.params.id;
-        const obj = Object.assign(
-          this.$store.state.organization.organization.peopleAndSupporting[
-            this.editedIndex
-          ],
-          {
-            nameSupportingStation: this.nameSupportingStation,
-            nationality: this.nationality,
-            // peopleAndSupportingStationUpload: this.suportUpload[0],
-          }
-        );
-        console.log(obj)
-        await axios.patch(
-            `/api/Organizations/${id}`,
-            {
-              peopleAndSupporting:  this.$store.state.organization.organization.peopleAndSupporting,
-            }
-        )
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        })
+        this.editPeopleAndSupportingItem()
+        // const id =  this.$route.params.id;
+        // const obj = Object.assign(
+        //   this.peopleAndSupportingItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     nameSupportingStation: this.nameSupportingStation,
+        //     nationality: this.nationality,
+        //     // peopleAndSupportingStationUpload: this.suportUpload[0],
+        //   }
+        // );
+        // console.log(obj)
+        // await axios.patch(
+        //     `/api/Organizations/${id}`,
+        //     {
+        //       peopleAndSupporting:  this.peopleAndSupportingItem,
+        //     }
+        // )
+        // .then(res => {
+        //   console.log(res);
+        // })
+        // .catch(err => {
+        //   console.log(err);
+        // })
       }
 
       this._id = "";

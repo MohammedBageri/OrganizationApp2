@@ -72,9 +72,13 @@ const order = {
 
 
 
-    async updateOrderNotCompleted({ commit }, { payload }) {
+    async updateOrderNotCompleted({ commit },  payload ) {
+      console.log("hvjfgh", payload)
+      const formData = {
+        note:payload.note
+      }
       let res = await axios
-        .patch(`/api/Orders/order_notCompleted/${payload.id}`);
+        .patch(`/api/Orders/order_notCompleted/${payload.id}`,formData);
       if (res.status === 200) {
         return true;
       }

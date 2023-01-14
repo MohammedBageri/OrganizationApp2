@@ -81,16 +81,16 @@
     <v-row>
       <v-col cols="12">
         <v-data-table
-          :items="$store.state.organization.organization.standingCommitte"
+          :items="standingCommitteItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -110,7 +110,7 @@ export default {
       { text: "عدد الإناث", value: "countFemale" },
       { text: "ملاحظة", value: "note" },
       { text: "مرفقات", value: "standingCommitteUpload"},
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -119,25 +119,61 @@ export default {
     note: "", //PC : Permanent Committee
     standingCommitteUpload: ""
   }),
+  computed: {
+    standingCommitteItem(){
+      return  this.$store.state.organization.organization.standingCommitte
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.standingCommitte.indexOf(
+        this.standingCommitteItem.indexOf(
           item
         );
-
+        const subItem =
+        this.standingCommitteItem[this.editedIndex];
+      const standingCommitteId = subItem._id;
       // this._id= item._id,
-      this._id= `${this.editedIndex}`,
+      this._id= `${standingCommitteId}`,
       this.name=item.name,
         (this.countMale = item.countMale),
         (this.countFemale = item.countFemale),
         (this.note = item.note);
     },
+    async editStandingCommitteItem(){
+      const formData = new FormData();
+      formData.append("name", this.name);
+      formData.append("countMale", this.countMale);
+      formData.append("countFemale", this.countFemale);
+      formData.append("note", this.note);
+      formData.append("standingCommitteUpload", this.standFile[0])
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_standingCommitte/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.standingCommitte
+          const obj = data[this.editedIndex]
+          this.standingCommitteItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+
+    },
     async save() {
       const formData = new FormData();
       formData.append("name", this.name);
       formData.append("countMale", this.countMale);
+      formData.append("countFemale", this.countFemale);
       formData.append("note", this.note);
       formData.append("standingCommitteUpload", this.standFile[0])
 
@@ -153,7 +189,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.standingCommitte
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.standingCommitte.push(obj)
+          this.standingCommitteItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -167,17 +203,18 @@ export default {
 
         this.save()
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.standingCommitte[
-            this.editedIndex
-          ],
-          {
-            name: this.name,
-            countMale: this.countMale,
-            countFemale: this.countFemale,
-            note: this.note,
-          }
-        );
+        this.editStandingCommitteItem()
+        // Object.assign(
+        //   this.standingCommitteItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     name: this.name,
+        //     countMale: this.countMale,
+        //     countFemale: this.countFemale,
+        //     note: this.note,
+        //   }
+        // );
       }
       (this._id = ""),
         (this.name = ""),

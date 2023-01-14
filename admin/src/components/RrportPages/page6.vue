@@ -14,16 +14,19 @@
         <th style="width: 10%">مكان التنفيذ</th>
         <th style="width: 10%">فترة التنفيذ</th>
         <th style="width: 10%">تكلفة المشروع</th>
+        <th style="width: 10%">المرفقات</th>
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.activitiesAndProjectsByOthersOrganization"
-        :key="item._id" >
+        :key="item._id" 
+        >
         <td style="width: 20%">{{ item.name }}</td>
         <td style="width: 20%">{{ item.fundingSourceAndNationality }}</td>
         <td>{{ item.numberBeneficiaries }}</td>
         <td>{{ item.executionPlace }}</td>
         <td>{{ item.executionTime }}</td>
         <td>{{ item.costProject }}</td>
+        <td><span @click="activitiesFile(item)"><a :href="activitiesChart" target="_blank">معاينة</a></span></td>
       </tr>
     </table>
     <br>
@@ -46,6 +49,7 @@
         <th style="width: 10%">رقم الحساب</th>
         <th style="width: 10%">العملة</th>
         <th style="width: 10%">الرصيد البنكي</th>
+        <th style="width: 10%">المرفقات</th>
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.bankAccount"
@@ -55,10 +59,31 @@
         <td>{{ item.numberAccount }}</td>
         <td>{{ item.currency }}</td>
         <td>{{ item.balance }}</td>
+        <td><span @click="bankAccountFile(item)"><a :href="bankAccountChart" target="_blank">معاينة</a></span></td>
+
       </tr>
     </table>
     </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    activitiesChart: "",
+    bankAccountChart: "",
+    
+  }),
+  methods:{
+    activitiesFile(item) {
+      this.standingCommitteChart = "http://localhost:3000/"+ item.activityUpload.substring(7)
+
+    },
+    bankAccountFile(item){
+      this.standingCommitteChart = "http://localhost:3000/"+ item.bankUpload.substring(7)
+    }
+  }
+}
+</script>
 
 <style scoped>
 table,

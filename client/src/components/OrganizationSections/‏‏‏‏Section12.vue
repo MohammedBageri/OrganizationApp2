@@ -85,16 +85,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="$store.state.organization.organization.organizationProject"
+          :items="organizationProjectItems"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -117,7 +117,7 @@ export default {
         { text: "جهة التمويل", value: "fundingSource" },
         {text: "المرفق", value: "projectUpload"},
 
-        // { text: "تعديل/حذف", value: "actions", sortable: false },
+        { text: "تعديل", value: "actions", sortable: false },
       ],
 
       _id: "",
@@ -129,16 +129,22 @@ export default {
       projectUpload: "",
     }
   },
+  computed: {
+    organizationProjectItems(){
+      return this.$store.state.organization.organization.organizationProject
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.organizationProject.indexOf(
-          item
-        );
+        this.organizationProjectItems.indexOf(item);
 
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
+      const subItem =
+        this.organizationProjectItems[this.editedIndex];
+      const organizationProjectItemsId = subItem._id;
+      this._id= `${organizationProjectItemsId}`,
         (this.name = item.name),
         (this.ExecutionPlace = item.ExecutionPlace),
         (this.beneficiaries = item.beneficiaries),
@@ -146,8 +152,7 @@ export default {
         (this.fundingSource = item.fundingSource);
         this.projectUpload = item.projects;
     },
-    async save () {
-      // const formData = this.$store.state.organization.organization.organizationProject;
+    async editOrganizationProject(){
       const formData = new FormData()
       formData.append('name', this.name)
       formData.append('ExecutionPlace', this.ExecutionPlace)
@@ -157,11 +162,34 @@ export default {
       formData.append('projectUpload', this.projects[0])
 
       // formData.projectUpload.push(this.projects)
-      console.log(this.projects,'save');
-      console.log(formData,'form');
-      console.log('this.ExecutionPlace:', this.ExecutionPlace)
+      const id =  this._id;
+      const orgPj = await axios.patch(`/api/Organizations/update_new_organizationProject/${id}`,formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then( (res) =>{
+        console.log('res',res);
+        const data = res.data.result.organizationProject;
+          const obj = data[this.editedIndex];
+          this.organizationProjectItems.splice(this.editedIndex, 1, obj)
+      }).catch( (err) =>{
+        console.log(err);
+      })
+
+    },
+    async save () {
+      // const formData = this.organizationProjectItems;
+      const formData = new FormData()
+      formData.append('name', this.name)
+      formData.append('ExecutionPlace', this.ExecutionPlace)
+      formData.append('beneficiaries', this.beneficiaries)
+      formData.append('costProject', this.costProject)
+      formData.append('fundingSource', this.fundingSource)
+      formData.append('projectUpload', this.projects[0])
+
+      // formData.projectUpload.push(this.projects)
       const id =  this.$route.params.id;
-      console.log('id: ', id)
       const orgPj = await axios.patch(`/api/Organizations/new_organizationProject/${id}`,formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -169,6 +197,9 @@ export default {
       })
       .then( (res) =>{
         console.log('res',res);
+        const data = res.data.result.organizationProject;
+          const obj = data[data.length - 1];
+          this.organizationProjectItems.push(obj);
       }).catch( (err) =>{
         console.log(err);
       })
@@ -176,33 +207,34 @@ export default {
     },
     async add() {
       if (this._id == undefined || this._id == "") {
-        this.$store.state.organization.organization.organizationProject.push({
-          name: this.name,
-          ExecutionPlace: this.ExecutionPlace,
-          beneficiaries: this.beneficiaries,
-          costProject: this.costProject,
-          fundingSource: this.fundingSource,
-          projectUpload: this.projects
-        });
+        // this.organizationProjectItems.push({
+        //   name: this.name,
+        //   ExecutionPlace: this.ExecutionPlace,
+        //   beneficiaries: this.beneficiaries,
+        //   costProject: this.costProject,
+        //   fundingSource: this.fundingSource,
+        //   projectUpload: this.projects
+        // });
         
-      await this.save()
+       this.save()
       
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.organizationProject[
-            this.editedIndex
-          ],
-          {
-            name: this.name,
-            ExecutionPlace: this.ExecutionPlace,
-            beneficiaries: this.beneficiaries,
-            costProject: this.costProject,
-            fundingSource: this.fundingSource,
-            projectUpload: this.projects
-          }
-        );
+        this.editOrganizationProject()
+        // Object.assign(
+        //   this.organizationProjectItems[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     name: this.name,
+        //     ExecutionPlace: this.ExecutionPlace,
+        //     beneficiaries: this.beneficiaries,
+        //     costProject: this.costProject,
+        //     fundingSource: this.fundingSource,
+        //     projectUpload: this.projects
+        //   }
+        // );
         
-      await this.save()
+      // await this.save()
       }
       (this._id = ""),
         (this.name = ""),

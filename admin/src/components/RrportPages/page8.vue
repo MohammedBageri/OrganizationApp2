@@ -1,6 +1,6 @@
 <template>
   <div dir="rtl">
-    <br />
+    <!-- <br />
     <v-row>
       <v-col cols="12" class="text-right">
         سادساً المخاطر والتحديات التي واجهتها المؤسسة</v-col
@@ -16,7 +16,7 @@
       >
         <td style="width: 20%">{{ item.Risk }}</td>
       </tr>
-    </table>
+    </table> -->
   </div>
 </template>
 

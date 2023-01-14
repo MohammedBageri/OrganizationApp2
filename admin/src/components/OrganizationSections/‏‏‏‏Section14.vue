@@ -72,16 +72,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="$store.state.organization.organization.revenue"
+          :items="revenueItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -101,7 +101,7 @@ export default {
       { text: "ملاحظة", value: "note" },
       { text: "", value: "revenueUpload"},
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -110,30 +110,60 @@ export default {
     note: "",
     revenueUpload: ""
   }),
+  computed: {
+    revenueItem () {
+      return this.$store.state.organization.organization.revenue
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.revenue.indexOf(item);
+        this.revenueItem.indexOf(item);
 
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
-        (this.nameRevenue = item.nameRevenue),
-        (this.debit = item.debit),
-        (this.note = item.note);
-        (this.revenueUpload= this.revenueFile)
+      this._id= `${this.editedIndex}`
+        // (this.nameRevenue = item.nameRevenue),
+        // (this.debit = item.debit),
+        // (this.note = item.note);
+        // (this.revenueUpload= this.revenueFile)
+    },
+    async editRevenueItem (){
+      const formData = new FormData();
+      // formData.append("nameRevenue", this.nameRevenue);
+      // formData.append("debit", this.debit);
+      // formData.append("note", this.note);
+      formData.append("revenueUpload", this.revenueFile[0])
+
+      const id =  this._id;
+
+      await axios
+      .patch(`/api/Organizations/new_revenue/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log("res", res);
+          const data = res.data.result.revenue
+          const obj = data[this.editedIndex]
+          this.revenueItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async save() {
       const formData = new FormData();
-      formData.append("nameRevenue", this.nameRevenue);
-      formData.append("debit", this.debit);
-      formData.append("note", this.note);
-      formData.append("revenueUpload", this.revenueFile)
+      // formData.append("nameRevenue", this.nameRevenue);
+      // formData.append("debit", this.debit);
+      // formData.append("note", this.note);
+      formData.append("revenueUpload", this.revenueFile[0])
 
       const id =  this.$route.params.id;
 
       await axios
-      .patch(`/api/Organizations/new_peopleAndSupporting/${id}`, formData, {
+      .patch(`/api/Organizations/new_revenue/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -142,7 +172,7 @@ export default {
           console.log("res", res);
           const data = res.data.result.revenue
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.revenue.push(obj)
+          this.revenueItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -154,15 +184,16 @@ export default {
         this.save()
 
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.revenue[this.editedIndex],
-          {
-            nameRevenue: this.nameRevenue,
-            debit: this.debit,
-            note: this.note,
-            revenueUpload: this.revenueFile
-          }
-        );
+        this.editRevenueItem()
+        // Object.assign(
+        //   this.revenueItem[this.editedIndex],
+        //   {
+        //     nameRevenue: this.nameRevenue,
+        //     debit: this.debit,
+        //     note: this.note,
+        //     revenueUpload: this.revenueFile
+        //   }
+        // );
       }
       (this._id = ""),
         (this.nameRevenue = ""),

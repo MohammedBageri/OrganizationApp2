@@ -1,7 +1,15 @@
 <template>
   <v-app>
-    <v-container>
+    <div class=".backgroundLogin">
       <slot />
-    </v-container>
+    </div>
   </v-app>
 </template>
+
+<style>
+.backgroundLogin{
+  height: 100%;
+  background-color: #178287;
+
+}
+</style>

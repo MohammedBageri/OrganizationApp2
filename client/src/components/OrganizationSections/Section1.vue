@@ -83,49 +83,6 @@
             reverse
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <v-text-field
-            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
-            v-model="$store.state.organization.organization.website"
-            type="sit"
-            outlined
-            dense
-            label="الموقع الإلكتروني إن وجد"
-            reverse
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <v-combobox
-            v-model="
-              $store.state.organization.organization.localOrInternational
-            "
-            class="text-right rounded-bl-xl rounded-tl-xl rounded-tr-xl"
-            outlined
-            dense
-            :items="items"
-            :rules="textRules"
-            label="محلية/دولية"
-            reverse
-          ></v-combobox>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <v-combobox
-            v-model="$store.state.organization.organization.mapArea"
-            class="
-              text-right
-              selection
-              rounded-bl-xl rounded-tl-xl rounded-tr-xl
-            "
-            item-text="name"
-            item-value="_id"
-            outlined
-            :rules="textRules"
-            dense
-            :items="$store.state.mapAreas"
-            label="النطاق الجغرافي"
-            reverse
-          ></v-combobox>
-        </v-col>
         <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
@@ -152,11 +109,11 @@
         </v-col> -->
       </v-row>
 
-      <!-- <v-row dense>
+      <v-row dense>
         <v-col cols="12">
           <v-divider />
         </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
+        <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
             v-model="$store.state.organization.organization.fieldWork"
@@ -178,7 +135,7 @@
             label="البريد الإلكتروني"
             reverse
           ></v-text-field>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="6" md="6" lg="4">
           <v-text-field
             class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
@@ -190,7 +147,78 @@
             reverse
           ></v-text-field>
         </v-col>
-      </v-row> -->
+
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-combobox
+            v-model="
+              $store.state.organization.organization.localOrInternational
+            "
+            class="text-right rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            outlined
+            dense
+            :items="items"
+            :rules="textRules"
+            label="محلية/دولية"
+            reverse
+          ></v-combobox>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-combobox
+            v-model="$store.state.organization.organization.mapArea"
+            class="
+              text-right
+              selection
+              rounded-bl-xl rounded-tl-xl rounded-tr-xl
+            "
+            item-text="name"
+            item-value="_id"
+            outlined
+            :rules="textRules"
+            dense
+            :items="$store.state.mapAreas"
+            label="النطاق الجغرافي"
+            reverse
+          ></v-combobox>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-text-field
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            v-model="$store.state.organization.organization.phone"
+            outlined
+            dense
+            :rules="textRules"
+            label="هاتف المؤسسة"
+            reverse
+          ></v-text-field>
+        </v-col>
+
+        <v-col cols="12" sm="6" md="6" lg="4">
+            <!-- :rules="imageRules" -->
+          <v-file-input
+            v-model="$store.state.organization.image"
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            type="file"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="اختر الشعار"
+            prepend-icon="mdi-camera"
+            label="شعار المنظمة"
+            outlined
+            dense
+          show-size
+            reverse
+            required
+            @change="uploadImage"
+          >
+          </v-file-input>
+          <span style="margin-right: 100px;"><a class="my-0" :href="showLogo" target="_blank">معاينةالصورة</a></span>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <Section20 />
+        <span style="margin-right: 100px;"><a :href="showOrganizationalChart" target="_blank">تحميل المرفق</a></span>
+        </v-col>
+       
+
+      </v-row>
 
       <v-row dense>
         <v-col cols="12">
@@ -229,47 +257,8 @@
             reverse
           ></v-combobox>
         </v-col> -->
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <v-text-field
-            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
-            v-model="$store.state.organization.organization.phone"
-            outlined
-            dense
-            :rules="textRules"
-            label="هاتف المؤسسة"
-            reverse
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <v-file-input
-            v-model="$store.state.organization.logo"
-            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
-            type="file"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="اختر الشعار"
-            prepend-icon="mdi-camera"
-            label="شعار المنظمة"
-            outlined
-            :rules="imageRules"
-            dense
-            reverse
-            required
-            @change="uploadImage"
-          >
-          </v-file-input>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="4">
-          <Section20 />
-        </v-col>
         
-      </v-row>
 
-      <v-row dense>
-        <v-col cols="12">
-          <!-- <div>title</div> -->
-          <v-divider />
-        </v-col>
-        
         <!-- <v-col cols="12" sm="6" md="6" lg="4">
           <v-file-input
             v-model="$store.state.organization.logo"
@@ -291,7 +280,37 @@
         <v-col cols="12" sm="6" md="6" lg="4">
           <Section20 />
         </v-col> -->
+        
       </v-row>
+
+      <!-- <v-row dense>
+        <v-col cols="12">
+          <div>title</div>
+          <v-divider />
+        </v-col>
+        
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <v-file-input
+            v-model="$store.state.organization.logo"
+            class="rounded-bl-xl rounded-tl-xl rounded-tr-xl"
+            type="file"
+            accept="image/png, image/jpeg, image/bmp"
+            placeholder="اختر الشعار"
+            prepend-icon="mdi-camera"
+            label="شعار المنظمة"
+            outlined
+            :rules="imageRules"
+            dense
+            reverse
+            required
+            @change="uploadImage"
+          >
+          </v-file-input>
+        </v-col>
+        <v-col cols="12" sm="6" md="6" lg="4">
+          <Section20 />
+        </v-col>
+      </v-row> -->
 
     </v-form>
   </v-container>
@@ -313,16 +332,19 @@ export default {
     items: ["محلية", "دولية"],
     typeItems: ["مؤسسة", "جمعية", "منظمة"],
     image: null,
+    showLogo:"",
+    showOrganizationalChart : ""
   }),
-  async mounted(){
-    this.$store.state.sectionForm =  this.$refs.section1;
-    try {
+  async created() {
+    await this.$store.dispatch("getStates"),
+      await this.$store.dispatch("getCities");
       await this.$store.dispatch("getMapAreas");
-    } catch (error) {
-      console.log(error)
-    }
-    console.log(this.$store.state.mapAreas)
-    console.log(this.$store.state.organization.organization.mapArea)
+      this.showLogo =  await "http://localhost:3000/"+ this.$store.state.organization.organization.logo.substring(7)
+      this.showOrganizationalChart =  await "http://localhost:3000/"+ this.$store.state.organization.organization.OrganizationalChart.substring(7)
+  },
+  mounted(){
+    this.$store.state.sectionForm =  this.$refs.section1;
+    this.files()
   },
   methods: {
     uploadImage(){
@@ -330,6 +352,12 @@ export default {
       console.log(event.target.files[0])
       this.$store.state.organization.organization.logo = this.logo
       console.log(this.logo);
+    },
+    async files(){
+
+       this.x = await "http://localhost:3000/"+ this.$store.state.organization.organization.logo.substring(7)
+      console.log(this.x,'sss')
+      return this.x
     }
   },
 };

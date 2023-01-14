@@ -71,10 +71,15 @@
         </tr>
         <tr>
           <th style="width: 50%; background-color: cornflowerblue;" class="tableRow">شعار المؤسسة</th>
-          <td style="width: 50%" ></td>
+          <td style="width: 50%" > <span><a :href="showLogo" target="_blank">معاينةالصورة</a></span></td>
         </tr>
-        
+        <tr>
+          <th style="width: 50%; background-color: cornflowerblue;" class="tableRow">المرفقات</th>
+          <td style="width: 50%" > <span><a :href="showOrganizationalChart" target="_blank">معاينة المرفق</a></span></td>
+        </tr>
       </tbody>
+
+      <!-- =========================================================================================================== -->
     </table>
     <br />
     <v-row >
@@ -111,6 +116,8 @@ export default {
   
   data() {
     return {
+      showLogo:"",
+      showOrganizationalChart : "",
       table: [
         { title: "اسم الموسسة بالعربي", data: this.$store.state.organization.organization.nameAr },
         { title: "إسم المؤسسة بالإنجليزي", data: this.$store.state.organization.organization.nameEn },
@@ -154,12 +161,17 @@ export default {
         {
           title: "شعار المؤسسة",
           
+          
         },
       ]
     };
   },
   components: {
     ReportHeader,
+  },
+  async created() {
+    this.showLogo =  await "http://localhost:3000/"+ this.$store.state.organization.organization.logo.substring(7)
+    this.showOrganizationalChart =  await "http://localhost:3000/"+ this.$store.state.organization.organization.OrganizationalChart.substring(7)
   },
   methods:{
     lastRenew(item){

@@ -94,12 +94,12 @@
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -109,6 +109,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import axios from 'axios';
 export default {
 
   data: () => ({
@@ -121,7 +122,7 @@ export default {
       { text: "تاريخ الإنشاء", value: "dateCreated" },
       { text: "الهاتف", value: "phone" },
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -146,13 +147,26 @@ export default {
       (this.dateCreated = dayjs(item.dateCreated).format("YYYY-MM-DD")),
       (this.phone = item.phone);
     },
+    async save(){
+      const formData = this.$store.state.organization.organization.facilitiesAndCenter
+      const id =this.$route.params.id 
+      console.log(formData);
+      await axios
+        .patch(`/api/Organizations/facilitiesAndCenter/${id}`,formData)
+        .then(res =>{
+          console.log(res.data)
+        })
+        .catch(err =>{
+          console.log(err)
+        })
+    },
     add() {
       if (this._id == undefined || this._id == "") {
         this.$store.state.organization.organization.facilitiesAndCenter.push({
           name: this.name,
           activityType: this.activityType,
-          state: this.state,
-          city: this.city,
+          state: this.state._id,
+          city: this.city._id,
           dateCreated: this.dateCreated,
           phone: this.phone,
         });
@@ -162,13 +176,14 @@ export default {
           {
             name: this.name,
             activityType: this.activityType,
-            state: this.state,
-            city: this.city,
+            state: this.state._id,
+            city: this.city._id,
             dateCreated: this.dateCreated,
             phone: this.phone,
           }
         );
       }
+      this.save()
       this._id = ""
       this.name = ""
       (this.activityType = ""),

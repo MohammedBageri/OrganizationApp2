@@ -85,16 +85,16 @@
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" mobile-breakpoint="0">
         <v-data-table
-          :items="$store.state.organization.organization.bankAccount"
+          :items="bankAccountItem"
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -116,7 +116,7 @@ export default {
       { text: "الرصيد البنكي", value: "balance" },
       { text: "مرفقات", value:"bankUpload" },
 
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
 
     _id: "",
@@ -127,19 +127,56 @@ export default {
     balance: "",
     bankUpload: ""
   }),
+  computed: {
+    bankAccountItem (){
+      return this.$store.state.organization.organization.bankAccount
+    }
+  },
 
   methods: {
     editItem(item) {
       this.editedIndex =
-        this.$store.state.organization.organization.bankAccount.indexOf(item);
+        this.bankAccountItem.indexOf(item);
 
       // (this._id = item._id),
-      this._id= `${this.editedIndex}`,
+      const subItem =
+        this.bankAccountItem[this.editedIndex];
+      const bankAccountId = subItem._id;
+      this._id= `${bankAccountId}`,
         (this.bankName = item.bankName),
         (this.address = item.address),
         (this.numberAccount = item.numberAccount),
         (this.currency = item.currency),
         (this.balance = item.balance);
+    },
+    async editBankAccountItem(){
+      const formData = new FormData();
+
+      formData.append("bankName", this.bankName)
+      formData.append("address", this.address)
+      formData.append("numberAccount", this.numberAccount) 
+      formData.append("currency", this.currency)
+      formData.append("balance", this.balance)
+      formData.append("bankUpload", this.bankFile[0])
+
+      const id = this._id;
+
+      await axios
+        .patch(`/api/Organizations/update_new_bankAccount/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          // console.log("res", res);
+          const data = res.data.result.bankAccount
+          const obj = data[this.editedIndex]
+          this.bankAccountItem.splice(this.editedIndex, 1, obj)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
 
     async save() {
@@ -162,9 +199,9 @@ export default {
         })
         .then((res) => {
           console.log("res", res);
-          const data = res.data.result.bankAccount
+          const data = res.data.result.bankAccount;
           const obj = data[data.length - 1]
-          this.$store.state.organization.organization.bankAccount.push(obj)
+          this.bankAccountItem.push(obj)
         })
         .catch((err) => {
           console.log(err);
@@ -177,18 +214,19 @@ export default {
       if (this._id == undefined || this._id == "") {
         this.save()
       } else {
-        Object.assign(
-          this.$store.state.organization.organization.bankAccount[
-            this.editedIndex
-          ],
-          {
-            bankName: this.bankName,
-            address: this.address,
-            numberAccount: this.numberAccount,
-            currency: this.currency,
-            balance: this.balance,
-          }
-        );
+        this.editBankAccountItem();
+        // Object.assign(
+        //   this.bankAccountItem[
+        //     this.editedIndex
+        //   ],
+        //   {
+        //     bankName: this.bankName,
+        //     address: this.address,
+        //     numberAccount: this.numberAccount,
+        //     currency: this.currency,
+        //     balance: this.balance,
+        //   }
+        // );
       }
 
       (this._id = ""),

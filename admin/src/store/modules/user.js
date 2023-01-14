@@ -12,7 +12,7 @@ const user = {
       password: "",
       address: "",
       mapArea: null,
-      role: ""
+      role: []
     },
     users: [],
   }),

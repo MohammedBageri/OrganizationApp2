@@ -115,12 +115,12 @@
           :headers="headers"
           :hide-default-footer="true"
         >
-          <!-- <template v-slot:item.actions="{ item }">
+          <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-          </template> -->
+            <!-- <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -142,7 +142,7 @@ export default {
       { text: "المديرية", value: "city.name" },
       { text: "الشارع", value: "street" },
       { text: "ملك/إيجار", value: "ownOrRent" },
-      // { text: "تعديل/حذف", value: "actions", sortable: false },
+      { text: "تعديل", value: "actions", sortable: false },
     ],
     _id: "",
     name: "",
@@ -177,7 +177,7 @@ export default {
       const id =this.$route.params.id 
       console.log(formData);
       await axios
-        .patch(`/api/Organizations/${id}`,formData)
+        .patch(`/api/Organizations/branche/${id}`,formData)
         .then(res =>{
           console.log(res.data)
         })
@@ -192,8 +192,8 @@ export default {
           name: this.name,
           dateCreated: this.dateCreated,
           permitNumber: this.permitNumber,
-          state: this.state,
-          city: this.city,
+          state: this.state._id,
+          city: this.city._id,
           street: this.street,
           ownOrRent: this.ownOrRent,
         });
@@ -202,12 +202,14 @@ export default {
           name: this.name,
           dateCreated: this.dateCreated,
           permitNumber: this.permitNumber,
-          state: this.state,
-          city: this.city,
+          state: this.state._id,
+          city: this.city._id,
           street: this.street,
           ownOrRent: this.ownOrRent,
         });
       }
+      console.log(this.$store.state.organization.organization.branche)
+        this.save()
 
       this._id = "";
       this.name = "";

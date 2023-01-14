@@ -201,12 +201,35 @@
                             ></v-autocomplete>
                           </v-col>
                         </v-row>
-                        <h4 class="fontColor">صلاحيات الحسابات</h4>
+                        <h4 class="fontColor">وظائف الحسابات</h4>
                         <v-row>
                           <v-col cols="12">
                             <v-autocomplete
-                              v-model=" $store.state.user.user.role"
+                              v-model="role"
                               :items="items"
+                              @change="oprUser"
+                              item-text="key"
+                              item-value="value"
+                              class="
+                                text-right
+                                rounded-bl-xl rounded-tl-xl rounded-tr-xl
+                              "
+                              outlined
+                              label="الوظائف"
+                              chips
+                              dense
+                              reverse
+                            ></v-autocomplete>
+                          </v-col>
+                        </v-row>
+                        <h4 class="fontColor">صلاحيات الحساب</h4>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-autocomplete
+                              v-model="role"
+                              :items="items1"
+                              multiple
+                              @change="perUser"
                               item-text="key"
                               item-value="value"
                               class="
@@ -332,6 +355,11 @@ export default {
       { key: "المسؤول المالي", value: "admin_2" },
       { key: "معمد الطلبات", value: "admin_3" },
     ],
+    items1: [
+      { key: "انشاء منظمة", value: "create" },
+      { key: "تعديل منظمة", value: "update" },
+      { key: "حذف منظمة", value: "delete" },
+    ],
     textRules: [(v) => !!v || "الحقل مطلوب"],
     phoneRule: [
       (v) => !!v || "يرجى كتابة رقم الهاتف",
@@ -359,6 +387,7 @@ export default {
       },
       { text: "تعديل/حذف", value: "actions", sortable: false },
     ],
+    role:null,
     accounts: [],
     editedIndex: -1,
     editedItem: {
@@ -441,6 +470,9 @@ export default {
     async save() {
       if (this.editedIndex > -1 && this.$refs.form.validate()) {
         const user = this.$store.state.user.user;
+        for(var i in this.role){
+          this.$store.state.user.user.role.push(this.role[i])
+        }
         console.log(user)
         await this.$store.dispatch("user/updateUser", {
           id: user._id,
@@ -453,6 +485,10 @@ export default {
         this.close();
         this.snackbarEdit = true;
       } else if (this.$refs.form.validate()) {
+        for(var i in this.role){
+          this.$store.state.user.user.role.push(this.role[i])
+        }
+        console.log(this.$store.state.user.user.role)
         const user = await this.$store.dispatch(
           "user/createUser",
           this.$store.state.user.user
@@ -470,7 +506,16 @@ export default {
       // this.$store.state.user.user.address = "";
       // this.$store.state.user.user.password = "";
     },
-  },
+    oprUser(){
+      this.$store.state.user.user.role = [this.role]
+      this.role = null
+    },
+    perUser(){
+        // this.$store.state.user.user.role.push(this.role[this.role.length - 1])
+        // console.log(this.$store.state.user.user.role)
+        // console.log(this.role.length - 1)
+    }
+  }
 };
 </script>
 

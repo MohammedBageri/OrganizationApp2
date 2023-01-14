@@ -13,6 +13,7 @@
         <th style="width: 10%">الذكور</th>
         <th style="width: 10%">الإناث</th>
         <th style="width: 20%">ملاحظة</th>
+        <th style="width: 20%">المرفقات</th>
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.standingCommitte"
@@ -22,6 +23,8 @@
         <td>{{ item.countMale }}</td>
         <td>{{ item.countFemale }}</td>
         <td>{{ item.note }}</td>
+        <td><span @click="standingCommitteFile(item)"><a :href="standingCommitteChart" target="_blank">معاينة</a></span></td>
+
       </tr>
     </table>
 
@@ -45,6 +48,7 @@
         <th style="width: 10%">مكان التنفيذ</th>
         <th style="width: 10%">فترة التنفيذ</th>
         <th style="width: 10%">تكلفة المشروع</th>
+        <th style="width: 10%">المرفقات</th>
       </tr>
       <tr
         v-for="item in $store.state.organization.organization.projectsByPeople"
@@ -56,11 +60,30 @@
         <td>{{ item.executionPlace }}</td>
         <td>{{ item.executionTime }}</td>
         <td>{{ item.costProject }}</td>
+        <td><span @click="projectsByPeopleFile(item)"><a :href="projectsByPeopleChart" target="_blank">معاينة</a></span></td>
+
       </tr>
     </table>
   </div>
 </template>
-
+<script>
+export default {
+  data: () => ({
+    standingCommitteChart: "",
+    projectsByPeopleChart: ""
+  }),
+  methods: {
+    standingCommitteFile (item){
+      console.log(item,'sss')
+      this.standingCommitteChart = "http://localhost:3000/"+ item.standingCommitteUpload.substring(7)
+    },
+    projectsByPeopleFile (item) {
+      this.projectsByPeopleChart = "http://localhost:3000/"+ item.projectsByPeopleUpload.substring(7)
+    }
+    
+  }
+}
+</script>
 <style scoped>
 table,
 th,

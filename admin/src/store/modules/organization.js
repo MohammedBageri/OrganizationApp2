@@ -59,7 +59,7 @@ const organization = {
       mainCenter: {
         street: "",
         buildingType: "",
-        ownOrRent: "",
+        ownOrRent: null,
         state: null,
         city: null,
         //
@@ -149,7 +149,7 @@ const organization = {
         await axios.get(`/api/Organizations/${id}`).then((res) => {
           if (res.status === 200) {
             commit("set_organization", res.data.organization);
-            console.log(this.state.organization.mapArea);
+            console.log(this.state.organization.organization);
           } else {
             //Error
           }
@@ -275,94 +275,160 @@ const organization = {
     },
     async updateOrganization({ commit, state }) {
       try {
-        // logo and pdf
-        let status = 200;
-        let data = "";
-        if (state.image.name != state.organization.logo) {
-          let form = new FormData();
-          // console.log(state.image);
-          form.append("logoImage", state.image);
+        const form = new FormData();
+        form.append("logo",state.image)
+        form.append("OrganizationalChart", state.organization.OrganizationalChart[0])
+        form.append("nameAr",state.organization.nameAr)
+        form.append("nameEn",state.organization.nameEn)
+        form.append("type",state.organization.type)
+        form.append("localOrInternational",state.organization.localOrInternational)
+        form.append("lastRenewalDate",state.organization.lastRenewalDate)
+        form.append("permitNumber",state.organization.permitNumber)
+        form.append("permitDate",state.organization.permitDate)
+        form.append("fieldWork",state.organization.fieldWork)
+        form.append("email",state.organization.email)
+        form.append("webSite",state.organization.website)
+        form.append("mapArea",state.organization.mapArea._id)
+        // form.append("DateisActive",state.organization.DateisActive)
+        form.append("phone", state.organization.phone)
+        form.append("street",state.organization.mainCenter.street)
+        form.append("buildingType",state.organization.mainCenter.buildingType)
+        form.append("ownOrRent",state.organization.mainCenter.ownOrRent)
+        form.append("state",state.organization.mainCenter.state)
+        form.append("city",state.organization.mainCenter.city)
 
-          // console.log(form);
-          // const res = await axios.post("/api/Organizations/UploadImage", form, {
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
-          // });
-          status = res.status;
-          data = res.data.image;
-        }
+        console.log(form);
+        // form.append("logoImage", state.image);
+        console.log("ب",state.organization);
 
-        if (status === 200) {
-          state.organization.logo = data;
-          // console.log(state.organization.logo);
 
-          if (state.chart) {
-            // if (state.chart.name != state.organization.OrganizationalChart) {
-            //   let form = new FormData();
-            //   form.append("pdf", state.chart);
-            //   console.log(state.chart);
-            //   const res = await axios.post("/api/Organizations/Upload", form, {
-            //     headers: {
-            //       "Content-Type": "multipart/form-data",
-            //     },
-            //   });
-            //   if (res.status === 200) {
-            //     state.organization.OrganizationalChart = res.data.file;
-            //     // console.log(state.organization.OrganizationalChart);
-            //   }
-            // }
-          }
-          console.log(state.organization._id);
-          let res = await axios.patch(
-            `/api/Organizations/${state.organization._id}`,
-            {
-              nameAr: state.organization.nameAr,
-              nameEn: state.organization.nameEn,
-              logo: state.organization.logo,
-              type: state.organization.type,
-              localOrInternational: state.organization.localOrInternational,
-              lastRenewalDate: state.organization.lastRenewalDate,
-              permitNumber: state.organization.permitNumber,
-              permitDate: state.organization.permitDate,
-              fieldWork: state.organization.fieldWork,
-              email: state.organization.email,
-              webSite: state.organization.webSite,
-              mapArea: state.organization.mapArea,
-              state: state.organization.state,
-              city: state.organization.city,
-              DateisActive: state.organization.DateisActive,
-              phone: state.organization.phone,
-              OrganizationalChart: state.organization.OrganizationalChart,
-              mainCenter: state.organization.mainCenter,
-              branche: state.organization.branche,
-              facilitiesAndCenter: state.organization.facilitiesAndCenter,
-              founder: state.organization.founder,
-              boardOfTruste: state.organization.boardOfTruste,
-              oversightCommitte: state.organization.oversightCommitte,
-              employeeStats: state.organization.employeeStats,
-              standingCommitte: state.organization.standingCommitte,
-              projectsByPeople: state.organization.projectsByPeople,
-              activitiesAndProjectsByOthersOrganization:
-                state.organization.activitiesAndProjectsByOthersOrganization,
-              organizationProject: state.organization.organizationProject,
-              bankAccount: state.organization.bankAccount,
-              revenue: state.organization.revenue,
-              expenditure: state.organization.expenditure,
-              peopleAndSupporting: state.organization.peopleAndSupporting,
-              organizationGoal: state.organization.organizationGoal,
-              organizationRegulation: state.organization.organizationRegulation,
-              risks: state.organization.risks,
-            }
-          );
-          if (res.status === 200) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
+        // console.log(form);
+        const res = await axios.patch(`/api/Organizations/${state.organization._id}`, form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+
+        });
+        // console.log('iam قثس', res.data.result._id);
+        // console.log('iam here', state.organization.id);
+        console.log(res);
+        commit('set_organization', res.data.result)
+        console.log(state.organization)
+
+        state.organization.logo = res.data.image;
+        state.organization.OrganizationalChart = res.data.chart;
+
+          // logo and pdf
+      //     const form = state.organization;
+      //     console.log(form);
+      //     // form.append("logoImage", state.image);
+  
+      //     // console.log(form);
+      //     const res = await axios.post("/api/Organizations", form, {
+      //       headers: {
+      //         "Content-Type": "multipart/form-data",
+      //       },
+  
+      //     });
+  
+      //     state.organization.id = res.data.result._id
+      //     // console.log('iam قثس', res.data.result._id);
+      //     // console.log('iam here', state.organization.id);
+      //     // console.log(res);
+      //     commit('set_organization', res.data.result)
+      //     console.log(state.organization)
+  
+      //     state.organization.logo = res.data.image;
+      //     state.organization.OrganizationalChart = res.data.chart;
+      //   // logo and pdf
+      //   // let status = 200;
+      //   // let data = "";
+      //   // if (state.image.name != state.organization.logo) {
+      //   //   let form = new FormData();
+      //   //   // console.log(state.image);
+      //   //   form.append("logoImage", state.image);
+
+      //   //   // console.log(form);
+      //   //   // const res = await axios.post("/api/Organizations/UploadImage", form, {
+      //   //   //   headers: {
+      //   //   //     "Content-Type": "multipart/form-data",
+      //   //   //   },
+      //   //   // });
+      //   //   status = res.status;
+      //   //   data = res.data.image;
+      //   // }
+
+      //   // if (status === 200) {
+      //   //   state.organization.logo = data;
+      //   //   // console.log(state.organization.logo);
+
+      //   //   if (state.chart) {
+      //   //     // if (state.chart.name != state.organization.OrganizationalChart) {
+      //   //     //   let form = new FormData();
+      //   //     //   form.append("pdf", state.chart);
+      //   //     //   console.log(state.chart);
+      //   //     //   const res = await axios.post("/api/Organizations/Upload", form, {
+      //   //     //     headers: {
+      //   //     //       "Content-Type": "multipart/form-data",
+      //   //     //     },
+      //   //     //   });
+      //   //     //   if (res.status === 200) {
+      //   //     //     state.organization.OrganizationalChart = res.data.file;
+      //   //     //     // console.log(state.organization.OrganizationalChart);
+      //   //     //   }
+      //   //     // }
+      //   //   }
+      //   // ===============================================================
+      // //     console.log(state.organization._id);
+      // //     let res = await axios.patch(
+      // //       `/api/Organizations/${state.organization._id}`,
+      // //       {
+      // //         nameAr: state.organization.nameAr,
+      // //         nameEn: state.organization.nameEn,
+      // //         logo: state.organization.logo,
+      // //         type: state.organization.type,
+      // //         localOrInternational: state.organization.localOrInternational,
+      // //         lastRenewalDate: state.organization.lastRenewalDate,
+      // //         permitNumber: state.organization.permitNumber,
+      // //         permitDate: state.organization.permitDate,
+      // //         fieldWork: state.organization.fieldWork,
+      // //         email: state.organization.email,
+      // //         webSite: state.organization.webSite,
+      // //         mapArea: state.organization.mapArea,
+      // //         state: state.organization.state,
+      // //         city: state.organization.city,
+      // //         DateisActive: state.organization.DateisActive,
+      // //         phone: state.organization.phone,
+      // //         OrganizationalChart: state.organization.OrganizationalChart,
+      // //         mainCenter: state.organization.mainCenter,
+      // //         branche: state.organization.branche,
+      // //         facilitiesAndCenter: state.organization.facilitiesAndCenter,
+      // //         founder: state.organization.founder,
+      // //         boardOfTruste: state.organization.boardOfTruste,
+      // //         oversightCommitte: state.organization.oversightCommitte,
+      // //         employeeStats: state.organization.employeeStats,
+      // //         standingCommitte: state.organization.standingCommitte,
+      // //         projectsByPeople: state.organization.projectsByPeople,
+      // //         activitiesAndProjectsByOthersOrganization:
+      // //           state.organization.activitiesAndProjectsByOthersOrganization,
+      // //         organizationProject: state.organization.organizationProject,
+      // //         bankAccount: state.organization.bankAccount,
+      // //         revenue: state.organization.revenue,
+      // //         expenditure: state.organization.expenditure,
+      // //         peopleAndSupporting: state.organization.peopleAndSupporting,
+      // //         organizationGoal: state.organization.organizationGoal,
+      // //         organizationRegulation: state.organization.organizationRegulation,
+      // //         risks: state.organization.risks,
+      // //       }
+      // //     );
+      // //     if (res.status === 200) {
+      // //       return true;
+      // //     } else {
+      // //       return false;
+      // //     }
+      // //   } else {
+      // //     return false;
+      // //   }
       } catch (error) {
         console.error(error);
       }

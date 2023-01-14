@@ -187,7 +187,7 @@ const organization = {
         // form.append("logoImage", state.image);
 
         // console.log(form);
-        const res = await axios.post("/api/Organizations", form, {
+        const res = await axios.post("/api/Organizations/organization_order", form, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -4,10 +4,10 @@
     <v-row dense>
       
       <v-col cols="12" sm="6" md="6" lg="4">
-        <v-combobox v-model="$store.state.organization.organization.mainCenter.state" :rules="textRules" class="text-right selection rounded-bl-xl rounded-tl-xl rounded-tr-xl" item-text="name" item-value="_id" outlined dense :items="$store.state.states" label="المحافظة" reverse ></v-combobox>
+        <v-autocomplete v-model="$store.state.organization.organization.mainCenter.state" :rules="textRules" class="text-right selection rounded-bl-xl rounded-tl-xl rounded-tr-xl" item-text="name" item-value="_id" outlined dense :items="$store.state.states" label="المحافظة" reverse ></v-autocomplete>
       </v-col>
       <v-col cols="12" sm="6" md="6" lg="4">
-        <v-combobox class="text-right rounded-bl-xl rounded-tl-xl rounded-tr-xl" v-model="$store.state.organization.organization.mainCenter.city" :rules="textRules" item-text="name" item-value="_id" outlined dense :items="$store.state.cities" label="المديرية" reverse ></v-combobox>
+        <v-autocomplete class="text-right rounded-bl-xl rounded-tl-xl rounded-tr-xl" v-model="$store.state.organization.organization.mainCenter.city" :rules="textRules" item-text="name" item-value="_id" outlined dense :items="$store.state.cities" label="المديرية" reverse ></v-autocomplete>
       </v-col>
       <v-col cols="12" sm="6" md="6" lg="4">
         <v-text-field outlined class="rounded-bl-xl rounded-tl-xl rounded-tr-xl" v-model="$store.state.organization.organization.mainCenter.street" :rules="textRules" dense label="الشارع" reverse></v-text-field>
@@ -22,7 +22,7 @@
         <v-text-field outlined class="rounded-bl-xl rounded-tl-xl rounded-tr-xl" v-model="$store.state.organization.organization.mainCenter.buildingType" :rules="textRules" dense label="نوع المبنى" reverse></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="6" lg="4">
-        <v-combobox class="rounded-bl-xl rounded-tl-xl rounded-tr-xl" outlined dense v-model="$store.state.organization.organization.mainCenter.ownOrRent" :rules="textRules" :items="ownOrRent" label="مبنى المقر: ملك/إيجار" reverse></v-combobox>
+        <v-autocomplete class="rounded-bl-xl rounded-tl-xl rounded-tr-xl" outlined dense v-model="$store.state.organization.organization.mainCenter.ownOrRent" :rules="textRules" :items="ownOrRent" label="مبنى المقر: ملك/إيجار" reverse></v-autocomplete>
       </v-col>
     </v-row>
   </v-form>
@@ -38,10 +38,14 @@ export default {
     ],
     
   }),
-  async created(){
+  async computed (){
     await this.$store.dispatch("getStates"),
     await this.$store.dispatch("getCities")
   },
+  // async created(){
+  //   await this.$store.dispatch("getStates"),
+  //   await this.$store.dispatch("getCities")
+  // },
   mounted(){
     this.$store.state.sectionFormTow =  this.$refs.section2;
   }
