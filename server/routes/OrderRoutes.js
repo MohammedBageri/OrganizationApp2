@@ -13,7 +13,8 @@ const {
   orderNotCompleted,
   orderCompleted,
   orderUnderImplementing,
-  orderUploadCertficate
+  orderUploadCertficate,
+  renewLicense
 } = require('../controllers/OrderController');
 
 router.route('/').get(authenticateUser,getAllOrder);
@@ -25,4 +26,5 @@ router.route('/order_uploadCertficate/:id').patch(authenticateUser,uploadCertfic
 router.route('/active/:id').patch(authenticateUser,isActive);
 router.route('/:id').get(authenticateUser,getSingleOrder);
 router.route('/:id').delete(authenticateUser,deleteOrder);
+router.route('/renew_license/:id').post(renewLicense);
 module.exports = router;

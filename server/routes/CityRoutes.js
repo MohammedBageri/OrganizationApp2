@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const roles = require('../utils/roles');
-const { authenticateUser, authorizePermissions } = require('../middleware/authentication');
+const { authenticateUser, authorizePermissions ,permissionsUser} = require('../middleware/authentication');
 const { getAllCities, getSingleCity, deleteCity, createCity, updateCity } = require('../controllers/CityController');
 
 router
@@ -12,7 +12,7 @@ router
 router.route('/:id').get(getSingleCity);
 router
   .route('/:id')
-  .delete(authenticateUser, authorizePermissions(roles.SUPERADMIN, roles.ADMIN), deleteCity)
-  .patch(authenticateUser, authorizePermissions(roles.SUPERADMIN, roles.ADMIN), updateCity);
+  .delete(authenticateUser, deleteCity)
+  .patch(authenticateUser, updateCity);
 
 module.exports = router;

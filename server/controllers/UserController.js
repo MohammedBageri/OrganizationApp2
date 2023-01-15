@@ -53,7 +53,7 @@ const updateUserPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Success! Password Updated.' });
 };
 const createAdmin = async (req, res) => {
-  const { email, name, username, phone, address, password ,mapArea ,role} = req.body;
+  const { email, name, username, phone, address, password ,mapArea ,role } = req.body;
  // const role = 'admin';
   const user = await User.create({ username, name, email, phone, address, password,role,mapArea });
   (user.isVerified = true), (user.verified = Date.now());

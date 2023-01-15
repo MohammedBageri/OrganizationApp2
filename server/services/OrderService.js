@@ -6,28 +6,26 @@ const { sendEmailOrder } = require('../utils');
 const roles = require('../utils/roles');
 const { generateFromEmail } = require('unique-username-generator');
 const removeFileIfExist = require('../utils/removeFileIfExist');
-const getAllOrder = async (user, queryObject) => {
 
+const getAllOrder = async (user, queryObject) => {
   const result = await User.findOne({ _id: user });
   const orderList = [];
   const organization = await Organization.find({ mapArea: result.mapArea });
-  const organizationAdmin = await Organization.find({});
-  
+
   const resultObject = {};
- // resultObject.status = queryObject.status;
-  if(result.role == roles.ADMIN){
+  if (result.role.includes(roles.ADMIN)) {
     resultObject.status = 'قيد الإنتظار';
   }
-  if(result.role == roles.MANAGER){
+  if (result.role.includes(roles.MANAGER)) {
     resultObject.status = 'قيد التنفيذ';
   }
-  if(result.role == roles.ADMIN_2){
+  if (result.role.includes(roles.ADMIN_2)){
     resultObject.status = 'مرحلة الدفع';
   }
-  if(result.role == roles.ADMIN_3){
+  if (result.role.includes(roles.ADMIN_3)) {
     resultObject.status = 'مكتمل';
   }
-  if(result.role ==roles.SUPERADMIN){
+  if (result.role.includes(roles.SUPERADMIN)) {
     return await Order.find(queryObject).populate({
       path: 'organization',
       populate: { path: 'mapArea' },
@@ -42,9 +40,9 @@ const getAllOrder = async (user, queryObject) => {
       select: ['nameAr', 'type', 'localOrInternational', 'isActive', 'phone'],
     });
 
-   if(order){
-    orderList.push(order);
-   }
+    if (order) {
+      orderList.push(order);
+    }
   }
   return orderList;
 };
@@ -53,7 +51,7 @@ const getSingleOrder = async (id) => {
     path: 'organization',
     populate: { path: 'mapArea' },
     select: ['nameAr', 'type', 'localOrInternational', 'isActive', 'phone'],
-  });;
+  });
   if (!order) {
     throw new CustomError.NotFoundError(`No order with id : ${id}`);
   }
@@ -75,11 +73,11 @@ const orderNotCompleted = async (id, note) => {
   update your organization with correct information by clicking on the following link : 
   <a href="${organizationURL}"> update organization info </a></p>`;
 
-  const messageAr = `<p> <br> ${note} <br> عذرا لايمكن إكمال طلبك يرجى قراءة الملاحظات </p>`
+  const messageAr = `<p> عذرا لايمكن إكمال طلبك يرجى قراءة الملاحظات <br> ${note} <br> </p>`;
   await sendEmailOrder({
     email: organization.email,
     messageEn,
-    messageAr
+    messageAr,
   });
 
   return order;
@@ -101,13 +99,13 @@ const orderUnderProccessing = async (id) => {
   const messageEn = `${content} <p> Information account <br>
    email:${organization.email},password:${generatedPassword}</p> `;
 
-  const messageAr = `<p> لقد تم قبول طلبك </p>`
+  const messageAr = `<p> لقد تم قبول طلبك </p>`;
   await sendEmailOrder({
     email: organization.email,
     messageEn,
-    messageAr
+    messageAr,
   });
-  
+
   await User.create({
     username: generateUsernane,
     email: organization.email,
@@ -117,7 +115,7 @@ const orderUnderProccessing = async (id) => {
     verified: Date.now(),
     verificationToken: '',
   });
-  
+
   order.status = 'قيد التنفيذ';
 
   return await order.save();
@@ -134,12 +132,12 @@ const orderUnderImplementing = async (id) => {
   const messageEn = `<p> Your order is under implementing ,
   Please pay the required amount to confirm your order </p>`;
 
-  const messageAr ='<p>يرجى دفع المبلغ المطلوب</p>'
+  const messageAr = '<p>يرجى دفع المبلغ المطلوب</p>';
 
   await sendEmailOrder({
     email: organization.email,
     messageEn,
-    messageAr
+    messageAr,
   });
 
   order.status = 'مرحلة الدفع';
@@ -168,12 +166,12 @@ const orderCompleted = async (id, bond) => {
   );
 
   const messageEn = `<p> Your order is completed </p>`;
-  const messageAr = '<p>طلبك مكتمل</p>'
+  const messageAr = '<p>طلبك مكتمل</p>';
 
   await sendEmailOrder({
     email: organization.email,
     messageEn,
-    messageAr
+    messageAr,
   });
 
   organization.isActive = 'مرخصة';
@@ -224,7 +222,23 @@ const deleteOrder = async (id) => {
   }
   return await order.remove();
 };
-
+//------------------------------------------------
+const renewLicense = async (id) => {
+  const organization = await Organization.findOne({ _id: id });
+  if (!organization) {
+    throw new CustomError.NotFoundError(`No organization with id : ${id}`);
+  }
+  if(organization.isActive === 'مرخصة'){
+    return 'organization is already active'
+  }
+  await Order.create({
+    organization: organization._id,
+    status: 'قيد الإنتظار',
+    type:'تجديد الترخيص'
+  });
+  const message = 'طلبك قيد الإنتظار';
+  return message;
+};
 module.exports = {
   getAllOrder,
   getSingleOrder,
@@ -235,4 +249,5 @@ module.exports = {
   orderUnderImplementing,
   orderCompleted,
   orderUploadCertficate,
+  renewLicense,
 };

@@ -24,15 +24,18 @@ const getSingleOrganization = async (id) => {
 };
 const createOrganization = async (organization) => {
   organization.body.logo = organization.files[0].path;
+  organization.body.permitNumber = Math.random().toString().slice(2, 12);
+  organization.body.permitDate = Date.now();
+
   if (organization.files[1]) {
     organization.body.OrganizationalChart = organization.files[1].path;
   }
   const newOrganization = await Organization.create(organization.body);
 
-  await Order.create({
-    organization: newOrganization._id,
-    status: 'قيد الإنتظار',
-  });
+  // await Order.create({
+  //   organization: newOrganization._id,
+  //   status: 'قيد الإنتظار',
+  // });
 
   return newOrganization;
 };
@@ -41,58 +44,28 @@ const updateOrganization = async (id, updatedOrganization) => {
   if (!organization) {
     throw new CustomError.NotFoundError(`No Organization with id : ${id}`);
   }
-  if(updatedOrganization.files){
+  if (updatedOrganization.files.length) {
     if (updatedOrganization.files[0].fieldname === 'OrganizationalChart') {
       updatedOrganization.body.OrganizationalChart = updatedOrganization.files[0].path;
     }
     if (updatedOrganization.files[0].fieldname === 'logo') {
       updatedOrganization.body.logo = updatedOrganization.files[0].path;
     }
-    if(updatedOrganization.files.length===2){
+    if (updatedOrganization.files.length === 2) {
       if (updatedOrganization.files[1].fieldname === 'OrganizationalChart') {
-          updatedOrganization.body.OrganizationalChart = updatedOrganization.files[1].path;
-        }
-        if (updatedOrganization.files[0].fieldname === 'logo') {
-          updatedOrganization.body.logo = updatedOrganization.files[0].path;
-        }
+        updatedOrganization.body.OrganizationalChart = updatedOrganization.files[1].path;
+      }
+      if (updatedOrganization.files[0].fieldname === 'logo') {
+        updatedOrganization.body.logo = updatedOrganization.files[0].path;
+      }
     }
   }
-  else{
-    updatedOrganization.body.OrganizationalChart = organization.OrganizationalChart
-    updatedOrganization.body.logo = organization.logo
-  }
-  
-
-  // if (organization.OrganizationalChart) {
-  //   if (updatedOrganization.files[1]) {
-  //     updatedOrganization.body.OrganizationalChart = updatedOrganization.files[1].path;
-  //   }
-  // }
-  console.log(updatedOrganization.body,'ss')
-  
+       
   await Organization.updateOne({ _id: id }, updatedOrganization.body, {
     new: true,
     runValidators: true,
   });
-
   return await Organization.findOne({ _id: id });
-
-};
-const updateNewBranche = async (id, branche) => {
-  const organization = await Organization.findOne({ _id: id });
-  organization.branche = branche.body
-  await organization.save()
-
-  return await Organization.findOne({ _id: id });
-
-};
-const updateNewFacilitiesAndCenter = async (id, facilitiesAndCenter) => {
-  const organization = await Organization.findOne({ _id: id });
-  organization.facilitiesAndCenter = facilitiesAndCenter.body
-  await organization.save()
-
-  return await Organization.findOne({ _id: id });
-
 };
 const deleteOrganization = async (id) => {
   const organization = await Organization.findOne({ _id: id });
@@ -479,7 +452,6 @@ const updateNewOrganizationRegulation = async (id, regulation) => {
 
   await newRegulation.save();
   return await Organization.findOne({ 'organizationRegulation._id': id });
- 
 };
 const updateNewOversightCommitte = async (id, oversightCommitte) => {
   const newOversightCommitte = await Organization.findOne({ 'oversightCommitte._id': id });
@@ -490,7 +462,7 @@ const updateNewOversightCommitte = async (id, oversightCommitte) => {
   if (oversightCommitte.file) {
     oversightCommitte.body.organizationRegulationUpload = oversightCommitte.file.path;
   }
-  
+
   const result = oversightCommitteList.find(({ _id }) => _id == id);
   result.name = oversightCommitte.body.name;
   result.dateOfBirth = oversightCommitte.body.dateOfBirth;
@@ -503,7 +475,6 @@ const updateNewOversightCommitte = async (id, oversightCommitte) => {
 
   await newOversightCommitte.save();
   return await Organization.findOne({ 'oversightCommitte._id': id });
- 
 };
 const updateNewPeopleAndSupporting = async (id, support) => {
   const supports = await Organization.findOne({ 'peopleAndSupporting._id': id });
@@ -514,16 +485,14 @@ const updateNewPeopleAndSupporting = async (id, support) => {
   if (support.file) {
     support.body.peopleAndSupportingStationUpload = support.file.path;
   }
-  
+
   const result = supportList.find(({ _id }) => _id == id);
   result.nameSupportingStation = support.body.nameSupportingStation;
   result.nationality = support.body.nationality;
   result.peopleAndSupportingStationUpload = support.body.peopleAndSupportingStationUpload;
 
-
   await supports.save();
   return await Organization.findOne({ 'peopleAndSupporting._id': id });
-  
 };
 const updateNewProjectsByPeople = async (id, project) => {
   const projects = await Organization.findOne({ 'projectsByPeople._id': id });
@@ -562,8 +531,7 @@ const updateNewRevenue = async (id, revenue) => {
   result.revenueUpload = revenue.body.revenueUpload;
 
   await newRevenue.save();
-  return await Organization.findOne({'revenue._id': id });
-
+  return await Organization.findOne({ 'revenue._id': id });
 };
 const updateNewStandingCommitte = async (id, standingCommitte) => {
   const newStandingCommitte = await Organization.findOne({ 'standingCommitte._id': id });
@@ -571,7 +539,7 @@ const updateNewStandingCommitte = async (id, standingCommitte) => {
   if (!newStandingCommitte) {
     throw new CustomError.NotFoundError(`No standingCommitte with id : ${id}`);
   }
-  if(standingCommitte.file) {
+  if (standingCommitte.file) {
     standingCommitte.body.standingCommitteUpload = standingCommitte.file.path;
   }
   const result = standingCommitteList.find(({ _id }) => _id == id);
@@ -582,8 +550,7 @@ const updateNewStandingCommitte = async (id, standingCommitte) => {
   result.standingCommitteUpload = standingCommitte.body.standingCommitteUpload;
 
   await newStandingCommitte.save();
-  return await Organization.findOne({'standingCommitte._id': id });
-
+  return await Organization.findOne({ 'standingCommitte._id': id });
 };
 const updateNewBankAccount = async (id, bankAccount) => {
   const newBankAccount = await Organization.findOne({ 'bankAccount._id': id });
@@ -591,7 +558,7 @@ const updateNewBankAccount = async (id, bankAccount) => {
   if (!newBankAccount) {
     throw new CustomError.NotFoundError(`No bankAccount with id : ${id}`);
   }
-  if(bankAccount.file) {
+  if (bankAccount.file) {
     bankAccount.body.bankUpload = bankAccount.file.path;
   }
 
@@ -604,8 +571,7 @@ const updateNewBankAccount = async (id, bankAccount) => {
   result.bankUpload = bankAccount.body.bankUpload;
 
   await newBankAccount.save();
-  return await Organization.findOne({'bankAccount._id': id });
-
+  return await Organization.findOne({ 'bankAccount._id': id });
 };
 const updateNewBoardOfTruste = async (id, boardOfTruste) => {
   const newBoardOfTruste = await Organization.findOne({ 'boardOfTruste._id': id });
@@ -613,7 +579,7 @@ const updateNewBoardOfTruste = async (id, boardOfTruste) => {
   if (!newBoardOfTruste) {
     throw new CustomError.NotFoundError(`No boardOfTruste with id : ${id}`);
   }
-  if(boardOfTruste.file) {
+  if (boardOfTruste.file) {
     boardOfTruste.body.BoardOfTrusteUpload = boardOfTruste.file.path;
   }
 
@@ -624,12 +590,11 @@ const updateNewBoardOfTruste = async (id, boardOfTruste) => {
   result.job = boardOfTruste.body.job;
   result.adjective = boardOfTruste.body.adjective;
   result.phone = boardOfTruste.body.phone;
-  result.currentPlace = boardOfTruste.body.adjective;
+  result.currentPlace = boardOfTruste.body.currentPlace;
   result.BoardOfTrusteUpload = boardOfTruste.body.BoardOfTrusteUpload;
 
   await newBoardOfTruste.save();
-  return await Organization.findOne({'boardOfTruste._id': id });
-
+  return await Organization.findOne({ 'boardOfTruste._id': id });
 };
 const updateNewExpenditure = async (id, expenditure) => {
   const newExpenditure = await Organization.findOne({ 'expenditure._id': id });
@@ -637,7 +602,7 @@ const updateNewExpenditure = async (id, expenditure) => {
   if (!newExpenditure) {
     throw new CustomError.NotFoundError(`No expenditure with id : ${id}`);
   }
-  if(expenditure.file) {
+  if (expenditure.file) {
     expenditure.body.expenditureUpload = expenditure.file.path;
   }
 
@@ -647,10 +612,8 @@ const updateNewExpenditure = async (id, expenditure) => {
   result.note = expenditure.body.note;
   result.expenditureUpload = expenditure.body.expenditureUpload;
 
-
   await newExpenditure.save();
-  return await Organization.findOne({'expenditure._id': id });
-
+  return await Organization.findOne({ 'expenditure._id': id });
 };
 const updateNewFounder = async (id, founder) => {
   const newFounder = await Organization.findOne({ 'founder._id': id });
@@ -658,7 +621,7 @@ const updateNewFounder = async (id, founder) => {
   if (!newFounder) {
     throw new CustomError.NotFoundError(`No founder with id : ${id}`);
   }
-  if(founder.file) {
+  if (founder.file) {
     founder.body.founderUpload = founder.file.path;
   }
 
@@ -673,9 +636,7 @@ const updateNewFounder = async (id, founder) => {
   result.founderUpload = founder.body.founderUpload;
 
   await newFounder.save();
-  return await Organization.findOne({'founder._id': id });
-
- 
+  return await Organization.findOne({ 'founder._id': id });
 };
 const updateNewOrganizationGoal = async (id, organizationGoal) => {
   const newOrganizationGoal = await Organization.findOne({ 'organizationGoal._id': id });
@@ -683,21 +644,52 @@ const updateNewOrganizationGoal = async (id, organizationGoal) => {
   if (!newOrganizationGoal) {
     throw new CustomError.NotFoundError(`No goal with id : ${id}`);
   }
-  if(organizationGoal.file) {
+  if (organizationGoal.file) {
     organizationGoal.body.organizationGoalUpload = organizationGoal.file.path;
   }
 
   const result = goalList.find(({ _id }) => _id == id);
   result.goal = organizationGoal.body.goal;
   result.organizationGoalUpload = organizationGoal.body.organizationGoalUpload;
-  
+
   await newOrganizationGoal.save();
-  return await Organization.findOne({'organizationGoal._id': id });
+  return await Organization.findOne({ 'organizationGoal._id': id });
+};
+const createOrganizationOrder = async (organization) => {
+  organization.body.logo = organization.files[0].path;
+  organization.body.permitNumber = Math.random().toString().slice(2, 12);
+  organization.body.permitDate = Date.now();
+  if (organization.files[1]) {
+    organization.body.OrganizationalChart = organization.files[1].path;
+  }
+  const newOrganization = await Organization.create(organization.body);
+
+  await Order.create({
+    organization: newOrganization._id,
+    status: 'قيد الإنتظار',
+  });
+
+  return newOrganization;
+};
+const updateNewBranche = async (id, branche) => {
+  const organization = await Organization.findOne({ _id: id });
+  organization.branche = branche.body
+  await organization.save()
+
+  return await Organization.findOne({ _id: id });
+ 
+};
+const updateNewFacilitiesAndCenter = async (id, facilitiesAndCenter) => {
+  const organization = await Organization.findOne({ _id: id });
+  organization.facilitiesAndCenter = facilitiesAndCenter.body
+  await organization.save()
+
+  return await Organization.findOne({ _id: id });
+
 };
 module.exports = {
   getAllOrganizations,
   getSingleOrganization,
-  updateNewFacilitiesAndCenter,
   deleteOrganization,
   createOrganization,
   updateOrganization,
@@ -723,12 +715,13 @@ module.exports = {
   updateNewPeopleAndSupporting,
   updateNewProjectsByPeople,
   updateNewRevenue,
-  updateNewBranche,
   updateNewStandingCommitte,
   updateNewBankAccount,
   updateNewBoardOfTruste,
   updateNewExpenditure,
   updateNewFounder,
-  updateNewOrganizationGoal
-
+  updateNewOrganizationGoal,
+  createOrganizationOrder,
+  updateNewBranche,
+  updateNewFacilitiesAndCenter
 };

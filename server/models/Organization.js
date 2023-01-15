@@ -191,9 +191,9 @@ const FacilitiesAndCenterSchema = new mongoose.Schema({
 
 const RisksSchema = new mongoose.Schema({
   Risk: { type: String },
-  riskUpload: {
-    type: String,
-  },
+  // riskUpload: {
+  //   type: String,
+  // },
 });
 
 //--------------

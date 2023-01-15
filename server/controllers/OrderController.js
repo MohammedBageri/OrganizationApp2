@@ -61,6 +61,12 @@ const deleteOrder = async (req, res) => {
 
   res.status(StatusCodes.OK).json(order);
 };
+//---------------------------------------------------------
+const renewLicense = async (req, res) => {
+  const id = req.params.id;
+  const order = await OrderService.renewLicense(id);
+  res.status(StatusCodes.OK).json(order);
+};
 
 module.exports = {
   getAllOrder,
@@ -72,4 +78,5 @@ module.exports = {
   orderUnderImplementing,
   orderCompleted,
   orderUploadCertficate,
+  renewLicense
 };

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const roles = require('../utils/roles');
-
+const permissions = require('../utils/permission');
 const {
   upload,
   activityUpload,
@@ -19,16 +19,15 @@ const {
   standingCommitteUpload,
   employeeStatsUpload,
 } = require('../middleware/upload');
-const { authenticateUser, authorizePermissions } = require('../middleware/authentication');
+
+const { authenticateUser, authorizePermissions ,permissionsUser } = require('../middleware/authentication');
 const {
   getAllOrganizations,
   getSingleOrganization,
-  updateNewFacilitiesAndCenter,
   deleteOrganization,
   createOrganization,
   updateOrganization,
   Counter,
-  updateNewBranche,
   newActivities,
   getOrganizationByEmail,
   newOrganizationProject,
@@ -56,9 +55,12 @@ const {
   updateNewBoardOfTruste,
   updateNewExpenditure,
   updateNewFounder,
-  updateNewOrganizationGoal
+  updateNewOrganizationGoal,
+  createOrganizationOrder,
+  updateNewBranche,
+  updateNewFacilitiesAndCenter
 } = require('../controllers/OrganizationController');
-
+ 
 router.route('/').get(getAllOrganizations).post(upload,createOrganization);
 router.route('/new_activity/:id').patch(activityUpload, newActivities);
 router.route('/new_organizationProject/:id').patch(projectUpload, newOrganizationProject);
@@ -74,11 +76,9 @@ router.route('/new_employeeStats/:id').patch(employeeStatsUpload, newEmployeeSta
 router.route('/new_expenditure/:id').patch(expenditureUpload,newExpenditure);
 router.route('/new_founder/:id').patch(founderUpload, newFounder);
 router.route('/new_organizationGoal/:id').patch(organizationGoalUpload, newOrganizationGoal);
-router.route('/Counter').get(Counter);
-router.route('/:id').get(getSingleOrganization);
-router.route('/getOrganizationByEmail/:email').get(getOrganizationByEmail);
-router.route('/:id').delete(deleteOrganization).patch(upload,updateOrganization);
+
 //-------------------------------------------------
+router.route('/:id').delete(authenticateUser,permissionsUser(roles.DELETE_ORGANIZATION,roles.SUPERADMIN),deleteOrganization).patch(upload,updateOrganization);
 router.route('/update_new_activity/:id').patch(activityUpload, updateNewActivities);
 router.route('/update_new_organizationProject/:id').patch(projectUpload, updateNewOrganizationProject);
 router.route('/update_new_organizationRegulation/:id').patch(organizationRegulationUpload, updateNewOrganizationRegulation);
@@ -91,9 +91,15 @@ router.route('/update_new_bankAccount/:id').patch(bankUpload, updateNewBankAccou
 router.route('/update_new_boardOfTruste/:id').patch(BoardOfTrusteUpload,updateNewBoardOfTruste);
 router.route('/update_new_expenditure/:id').patch(expenditureUpload,updateNewExpenditure);
 router.route('/update_new_founder/:id').patch(founderUpload, updateNewFounder);
-router.route('/branche/:id').patch( updateNewBranche);
-router.route('/facilitiesAndCenter/:id').patch( updateNewFacilitiesAndCenter);
-router.route('/update_new_founder/:id').patch(founderUpload, updateNewFounder);
 router.route('/update_new_organizationGoal/:id').patch(organizationGoalUpload, updateNewOrganizationGoal);
+//--------------------------------------------------------------------
+router.route('/organization_order').post(upload,createOrganizationOrder);
+router.route('/Counter').get(Counter);
+router.route('/:id').get(getSingleOrganization);
+router.route('/getOrganizationByEmail/:email').get(getOrganizationByEmail);
+router.route('/branche/:id').patch(updateNewBranche);
+router.route('/facilitiesAndCenter/:id').patch(updateNewFacilitiesAndCenter);
+
+
 
 module.exports = router;

@@ -31,13 +31,12 @@ const getSingleOrganization = async (req, res) => {
   res.status(StatusCodes.OK).json({ organization });
 };
 const createOrganization = async (req, res) => {
-  const result = await OrganizationService.createOrganization(req);
-  
+  const result = await OrganizationService.createOrganization(req );
+
   res.status(StatusCodes.CREATED).json({ result });
 };
 const updateOrganization = async (req, res) => {
   const { id } = req.params;
-  
   const updateOrganization = await OrganizationService.updateOrganization(id,req);
   res.status(StatusCodes.OK).json({ updateOrganization });
 };
@@ -228,7 +227,17 @@ const updateNewFounder = async (req,res)=>{
   
   res.status(StatusCodes.CREATED).json({ result });
 }
-
+const updateNewOrganizationGoal = async (req,res)=>{
+  const { id } = req.params;
+  const result = await OrganizationService.updateNewOrganizationGoal(id,req);
+  
+  res.status(StatusCodes.CREATED).json({ result });
+}
+//---------------------------------------------------
+const createOrganizationOrder = async(req,res)=>{
+  const result = await OrganizationService.createOrganizationOrder(req );
+  res.status(StatusCodes.CREATED).json({ result });
+};
 const updateNewBranche = async (req,res)=>{
   const { id } = req.params;
   const result = await OrganizationService.updateNewBranche(id,req);
@@ -241,12 +250,6 @@ const updateNewFacilitiesAndCenter = async (req,res)=>{
   
   res.status(StatusCodes.CREATED).json({ result });
 }
-const updateNewOrganizationGoal = async (req,res)=>{
-  const { id } = req.params;
-  const result = await OrganizationService.updateNewOrganizationGoal(id,req);
-  
-  res.status(StatusCodes.CREATED).json({ result });
-}
 module.exports = {
   getAllOrganizations,
   getSingleOrganization,
@@ -254,7 +257,6 @@ module.exports = {
   createOrganization,
   updateOrganization,
   Counter,
-  updateNewBranche,
   newActivities,
   getOrganizationByEmail,
   newOrganizationProject,
@@ -282,8 +284,10 @@ module.exports = {
   updateNewBoardOfTruste,
   updateNewExpenditure,
   updateNewFounder,
-  updateNewFacilitiesAndCenter,
-  updateNewOrganizationGoal
+  updateNewOrganizationGoal,
+  createOrganizationOrder,
+  updateNewBranche,
+  updateNewFacilitiesAndCenter
   
 };
 

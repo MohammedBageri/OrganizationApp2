@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const roles = require('../utils/roles');
+const permissions = require('../utils/permission');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -42,9 +43,13 @@ const UserSchema = new mongoose.Schema({
     ref: 'MapArea',
   },
   role: {
-    type: String,
+    type: [String],
     enum: Object.values(roles),
   },
+  // permission: {
+  //   type: [String],
+  //   enum: Object.values(permissions),
+  // },
   verificationToken: String,
   isVerified: {
     type: Boolean,

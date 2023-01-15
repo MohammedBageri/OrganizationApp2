@@ -11,6 +11,9 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     enum:['منتهي','مكتمل','مرحلة الدفع','قيد الإنتظار','قيد التنفيذ'],
   },
+  type:{
+    type:String
+  }
 },
 { timestamps: true }
 );

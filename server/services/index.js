@@ -9,17 +9,16 @@ const {
   isActive,
   deleteOrder,
   orderCompleted,
-  orderUploadCertficate
+  orderUploadCertficate,
+  renewLicense
 } = require('./OrderService');
 const {
   getAllOrganizations,
   getSingleOrganization,
-  updateNewBranche,
   deleteOrganization,
   createOrganization,
   updateOrganization,
   getOrganizationByEmail,
-  updateNewFacilitiesAndCenter,
   newActivities,
   newOrganizationProject,
   newOrganizationRegulation,
@@ -46,7 +45,10 @@ const {
   updateNewBoardOfTruste,
   updateNewExpenditure,
   updateNewFounder,
-  updateNewOrganizationGoal
+  updateNewOrganizationGoal,
+  createOrganizationOrder,
+  updateNewBranche,
+  updateNewFacilitiesAndCenter
  
 
   
@@ -91,7 +93,8 @@ module.exports = {
     orderNotCompleted,
     orderUnderImplementing,
     orderCompleted,
-    orderUploadCertficate
+    orderUploadCertficate,
+    renewLicense
   },
   OrganizationService:{
     getAllOrganizations,
@@ -121,14 +124,15 @@ module.exports = {
     updateNewPeopleAndSupporting,
     updateNewProjectsByPeople,
     updateNewRevenue,
-    updateNewFacilitiesAndCenter,
     updateNewStandingCommitte,
     updateNewBankAccount,
     updateNewBoardOfTruste,
     updateNewExpenditure,
     updateNewFounder,
     updateNewOrganizationGoal,
-    updateNewBranche
+    createOrganizationOrder,
+    updateNewBranche,
+    updateNewFacilitiesAndCenter
     
   },
   NewsService:{
