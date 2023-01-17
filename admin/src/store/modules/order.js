@@ -43,28 +43,28 @@ const order = {
     //     commit("set_orders", res.data);
     //   }
     // },
-    async getOrderUnderProcessing({ commit }) {
-      let res = await axios.get(`/api/Orders`, { params: { status: 'قيد الإنتظار' } })
+    async getOrderUnderProcessing({ commit }, payload) {
+      let res = await axios.get(`/api/Orders`, { params: { status: 'قيد الإنتظار', type: payload.type } })
       if (res.status === 200) {
         commit("set_orders", res.data);
       }
 
     },
-    async getOrderUnderImplementing({ commit }) {
-      let res = await axios.get(`/api/Orders`, { params: { status: 'قيد التنفيذ' } })
+    async getOrderUnderImplementing({ commit }, payload) {
+      let res = await axios.get(`/api/Orders`, { params: { status: 'قيد التنفيذ', type: payload.type } })
       if (res.status === 200) {
         commit("set_orders", res.data);
       }
     },
-    async getOrderBeforPayment({ commit }) {
-      let res = await axios.get(`/api/Orders`, { params: { status: 'مرحلة الدفع' } })
+    async getOrderBeforPayment({ commit }, payload) {
+      let res = await axios.get(`/api/Orders`, { params: { status: 'مرحلة الدفع', type: payload.type } })
       if (res.status === 200) {
         commit("set_orders", res.data);
       }
     },
 
-    async getOrderCompleted({ commit }) {
-      let res = await axios.get(`/api/Orders`, { params: { status: 'مكتمل' } })
+    async getOrderCompleted({ commit }, payload) {
+      let res = await axios.get(`/api/Orders`, { params: { status: 'مكتمل', type: payload.type } })
       if (res.status === 200) {
         commit("set_orders", res.data);
       }

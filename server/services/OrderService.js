@@ -12,18 +12,18 @@ const getAllOrder = async (user, queryObject) => {
   const orderList = [];
   const organization = await Organization.find({ mapArea: result.mapArea });
 
-  const resultObject = {};
+ // const resultObject = {};
   if (result.role.includes(roles.ADMIN)) {
-    resultObject.status = 'قيد الإنتظار';
+    queryObject.status = 'قيد الإنتظار';
   }
   if (result.role.includes(roles.MANAGER)) {
-    resultObject.status = 'قيد التنفيذ';
+    queryObject.status = 'قيد التنفيذ';
   }
   if (result.role.includes(roles.ADMIN_2)){
-    resultObject.status = 'مرحلة الدفع';
+    queryObject.status = 'مرحلة الدفع';
   }
   if (result.role.includes(roles.ADMIN_3)) {
-    resultObject.status = 'مكتمل';
+    queryObject.status = 'مكتمل';
   }
   if (result.role.includes(roles.SUPERADMIN)) {
     return await Order.find(queryObject).populate({
@@ -32,14 +32,14 @@ const getAllOrder = async (user, queryObject) => {
       select: ['nameAr', 'type', 'localOrInternational', 'isActive', 'phone'],
     });
   }
+//console.log(queryObject)
   for (var i in organization) {
-    resultObject.organization = organization[i];
-    const order = await Order.findOne(resultObject).populate({
+    queryObject.organization = organization[i];
+    const order = await Order.findOne(queryObject).populate({
       path: 'organization',
       populate: { path: 'mapArea' },
       select: ['nameAr', 'type', 'localOrInternational', 'isActive', 'phone'],
     });
-
     if (order) {
       orderList.push(order);
     }
@@ -66,8 +66,8 @@ const orderNotCompleted = async (id, note) => {
   if (!organization) {
     throw new CustomError.NotFoundError(`No organization with id : ${order.organization}`);
   }
-  const origin = 'http://localhost:3000';
-  const organizationURL = `${origin}/api/Organizations/updateOrganization?id=${order.organization}`;
+  const origin = 'http://organization2-admin.novelsoft.com.co';
+  const organizationURL = `${origin}/organization/edit/${order.organization}`;
 
   const messageEn = `<p> Your order is not completed ,Please
   update your organization with correct information by clicking on the following link : 
@@ -80,7 +80,7 @@ const orderNotCompleted = async (id, note) => {
     messageAr,
   });
 
-  return order;
+  return await order.remove();
 };
 const orderUnderProccessing = async (id) => {
   const order = await Order.findOne({ _id: id });
@@ -91,10 +91,8 @@ const orderUnderProccessing = async (id) => {
   if (!organization) {
     throw new CustomError.NotFoundError(`No organization with id : ${order.organization}`);
   }
-
   const generateUsernane = generateFromEmail(organization.email, 3);
   const generatedPassword = generateFromEmail(organization.email, 5);
-
   const content = `<h4> Your order under proccessing </h4>`;
   const messageEn = `${content} <p> Information account <br>
    email:${organization.email},password:${generatedPassword}</p> `;
@@ -105,19 +103,19 @@ const orderUnderProccessing = async (id) => {
     messageEn,
     messageAr,
   });
-
-  await User.create({
-    username: generateUsernane,
-    email: organization.email,
-    password: generatedPassword,
-    role: roles.USER,
-    isVerified: true,
-    verified: Date.now(),
-    verificationToken: '',
-  });
-
+  const user = await User.findOne({email:organization.email})
+  if(!user){
+    await User.create({
+      username: generateUsernane,
+      email: organization.email,
+      password: generatedPassword,
+      role: roles.USER,
+      isVerified: true,
+      verified: Date.now(),
+      verificationToken: '',
+    });  
+  }
   order.status = 'قيد التنفيذ';
-
   return await order.save();
 };
 const orderUnderImplementing = async (id) => {
@@ -144,6 +142,7 @@ const orderUnderImplementing = async (id) => {
 
   return await order.save();
 };
+//استكمال معلومات السند + لا ننسى فكرة انه اذا فيه مرفق فايل او لا
 const orderCompleted = async (id, bond) => {
   const order = await Order.findOne({ _id: id });
   if (!order) {
@@ -153,17 +152,30 @@ const orderCompleted = async (id, bond) => {
   if (!organization) {
     throw new CustomError.NotFoundError(`No organization with id : ${order.organization}`);
   }
-  removeFileIfExist(organization.bond);
-  await Organization.updateOne(
-    { _id: order.organization },
-    {
-      bond: bond.file.path,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+ 
+  if (bond.file) {
+    bond.body.bond = bond.file.path;
+  }
+  organization.bondNumber = bond.body.bondNumber,
+  organization.bondAmount = bond.body.bondAmount,
+  organization.bondDate = bond.body.bondDate ,
+  organization.bondNote = bond.body.bondNote,
+  organization.bond = bond.body.bond
+
+  // await Organization.updateOne(
+  //   { _id: order.organization },
+  //   {
+  //     bond: bond.file.path,
+  //     bondNumber:bond.body.bondNumber,
+  //     bondAmount:bond.body.bondAmount,
+  //     bondDate:bond.body.bondDate ,
+  //     bondNote:bond.body.bondNote
+  //   },
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
 
   const messageEn = `<p> Your order is completed </p>`;
   const messageAr = '<p>طلبك مكتمل</p>';
@@ -175,6 +187,7 @@ const orderCompleted = async (id, bond) => {
   });
 
   organization.isActive = 'مرخصة';
+  organization.DateisActive = new Date();
   order.status = 'مكتمل';
   await organization.save();
   return await order.save();
@@ -188,18 +201,29 @@ const orderUploadCertficate = async (id, certficate) => {
   if (!organization) {
     throw new CustomError.NotFoundError(`No organization with id : ${order.organization}`);
   }
-  removeFileIfExist(organization.certficate);
-  await Organization.updateOne(
-    { _id: order.organization },
-    {
-      certficate: certficate.file.path,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  if (certficate.file) {
+    certficate.body.certficate = certficate.file.path;
+  }
+  organization.certficate = certficate.body.certficate 
+  organization.permitNumber = certficate.body.permitNumber,
+  organization.permitDate = certficate.body.permitDate ,
+  organization.permitExpireDate = certficate.body.permitExpireDate,
+ 
+  // await Organization.updateOne(
+  //   { _id: order.organization },
+  //   {
+  //     certficate: certficate.body.certficate,
+  //     permitNumber:certficate.body.permitNumber,
+  //     permitDate:certficate.body.permitDate,
+  //     permitExpireDate:certficate.body.permitExpireDate
+  //   },
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
   order.status = 'منتهي';
+  await organization.save();
   await order.save();
   return await Organization.findOne({ _id: order.organization });
 };

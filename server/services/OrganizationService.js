@@ -3,8 +3,8 @@ const CustomError = require('../errors');
 const Order = require('../models/Order');
 const removeFileIfExist = require('../utils/removeFileIfExist');
 
-const getAllOrganizations = async (queryObject) => {
-  return Organization.find(queryObject)
+const getAllOrganizations = async () => {
+  return Organization.find({ isActive: 'مرخصة' })
     .populate({ path: 'mapArea' })
     .populate([{ path: 'branche.city' }, { path: 'branche.state' }])
     .populate([{ path: 'mainCenter.city' }, { path: 'mainCenter.state' }])
@@ -24,8 +24,8 @@ const getSingleOrganization = async (id) => {
 };
 const createOrganization = async (organization) => {
   organization.body.logo = organization.files[0].path;
-  organization.body.permitNumber = Math.random().toString().slice(2, 12);
-  organization.body.permitDate = Date.now();
+ // organization.body.permitNumber = Math.random().toString().slice(2, 12);
+//  organization.body.permitDate = Date.now();
 
   if (organization.files[1]) {
     organization.body.OrganizationalChart = organization.files[1].path;
@@ -60,7 +60,7 @@ const updateOrganization = async (id, updatedOrganization) => {
       }
     }
   }
-       
+
   await Organization.updateOne({ _id: id }, updatedOrganization.body, {
     new: true,
     runValidators: true,
@@ -656,36 +656,40 @@ const updateNewOrganizationGoal = async (id, organizationGoal) => {
   return await Organization.findOne({ 'organizationGoal._id': id });
 };
 const createOrganizationOrder = async (organization) => {
-  organization.body.logo = organization.files[0].path;
-  organization.body.permitNumber = Math.random().toString().slice(2, 12);
-  organization.body.permitDate = Date.now();
-  if (organization.files[1]) {
-    organization.body.OrganizationalChart = organization.files[1].path;
+  const result = await Organization.findOne({ email: organization.body.email });
+  if (!result) {
+    organization.body.logo = organization.files[0].path;
+    //organization.body.permitNumber = Math.random().toString().slice(2, 12);
+   // organization.body.permitDate = Date.now();
+    if (organization.files[1]) {
+      organization.body.OrganizationalChart = organization.files[1].path;
+    }
+    const newOrganization = await Organization.create(organization.body);
+
+    return await Order.create({
+      organization: newOrganization._id,
+      status: 'قيد الإنتظار',
+    });
+  } else {
+    return await Order.create({
+      organization: result._id,
+      status: 'قيد الإنتظار',
+    });
   }
-  const newOrganization = await Organization.create(organization.body);
-
-  await Order.create({
-    organization: newOrganization._id,
-    status: 'قيد الإنتظار',
-  });
-
-  return newOrganization;
 };
 const updateNewBranche = async (id, branche) => {
   const organization = await Organization.findOne({ _id: id });
-  organization.branche = branche.body
-  await organization.save()
+  organization.branche = branche.body;
+  await organization.save();
 
   return await Organization.findOne({ _id: id });
- 
 };
 const updateNewFacilitiesAndCenter = async (id, facilitiesAndCenter) => {
   const organization = await Organization.findOne({ _id: id });
-  organization.facilitiesAndCenter = facilitiesAndCenter.body
-  await organization.save()
+  organization.facilitiesAndCenter = facilitiesAndCenter.body;
+  await organization.save();
 
   return await Organization.findOne({ _id: id });
-
 };
 module.exports = {
   getAllOrganizations,
@@ -723,5 +727,5 @@ module.exports = {
   updateNewOrganizationGoal,
   createOrganizationOrder,
   updateNewBranche,
-  updateNewFacilitiesAndCenter
+  updateNewFacilitiesAndCenter,
 };

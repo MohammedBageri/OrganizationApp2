@@ -1,24 +1,27 @@
 <template>
   <AppLayout>
     <v-container class="ml-10" style="height: 100%">
-      <v-row justify="center" align="center" class=" mb-5">
-      <v-card dir="rtl"  class="rounded-tr-xl rounded-tl-xl" width="900px">
-        <div>
-          <v-container>
-            <v-row>
-              <v-col cols="6" class="mt-3" sm="4" md="4" lg="2">
-                <v-img src="/Yemen.png" max-height="150" max-width="150"></v-img>
-              </v-col>
-              <v-col cols="6" class="mt-5" sm="6" md="6" lg="4">
-                <h3 >وزارة الشئون الإجتماعية و العمل</h3>
-                <h5>نظام تسجيل المنظمات و تجديد الرخص</h5>
-              </v-col>
-              
-            </v-row>
-          </v-container>
-        </div>
-      </v-card>
-    </v-row>
+      <v-row justify="center" align="center" class="mb-5">
+        <v-card dir="rtl" class="rounded-tr-xl rounded-tl-xl" width="900px">
+          <div>
+            <v-container>
+              <v-row>
+                <v-col cols="6" class="mt-3" sm="4" md="4" lg="2">
+                  <v-img
+                    src="/Yemen.png"
+                    max-height="150"
+                    max-width="150"
+                  ></v-img>
+                </v-col>
+                <v-col cols="6" class="mt-5" sm="6" md="6" lg="4">
+                  <h3>وزارة الشئون الإجتماعية و العمل</h3>
+                  <h5>نظام تسجيل المنظمات و تجديد الرخص</h5>
+                </v-col>
+              </v-row>
+            </v-container>
+          </div>
+        </v-card>
+      </v-row>
 
       <v-row justify="center" align="center" style="height: 100%">
         <v-card
@@ -30,7 +33,9 @@
           transition="scroll-x-transition"
         >
           <v-card-title class="grey lighten-3">
-            <div>إستمارة تقديم طلب إضافة المنظمة لوزارة الشئون الإجتماعية والعمل</div>
+            <div>
+              إستمارة تقديم طلب إضافة المنظمة لوزارة الشئون الإجتماعية والعمل
+            </div>
             <v-spacer></v-spacer>
 
             <v-tooltip bottom>
@@ -117,9 +122,8 @@
                   تعديل البيانات الأساسية
                   <v-icon class="mr-2">mdi-arrow-down-bold-circle</v-icon>
                 </v-btn>
-                
-                </v-stepper-content>
-              
+              </v-stepper-content>
+
               <!-- Section 3 -->
               <v-stepper-step
                 editable
@@ -153,7 +157,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 4 -->
@@ -188,7 +191,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 5 -->
@@ -223,7 +225,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 6 -->
@@ -326,8 +327,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
-      
               </v-stepper-content>
 
               <!-- Section 9 -->
@@ -362,7 +361,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 10 -->
@@ -398,7 +396,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 11 -->
@@ -433,7 +430,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 12 -->
@@ -468,7 +464,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 13 -->
@@ -503,7 +498,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 14 -->
@@ -538,7 +532,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 15 -->
@@ -579,7 +572,7 @@
               <v-stepper-step
                 editable
                 edit-icon="mdi-check"
-                :complete="(nextStep > 15)"
+                :complete="nextStep > 15"
                 :color="nextStep == 15 ? 'background' : 'green'"
                 step="15"
                 dir="rtl"
@@ -594,7 +587,7 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text"
-                  @click="(nextStep = 15)"
+                  @click="nextStep = 15"
                 >
                   التالي
                   <v-icon class="mr-2">mdi-arrow-down-bold-circle</v-icon>
@@ -602,19 +595,18 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text mr-2"
-                  @click="(nextStep = 14)"
+                  @click="nextStep = 14"
                 >
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 16 -->
               <v-stepper-step
                 editable
                 edit-icon="mdi-check"
-                :complete="(nextStep > 16)"
+                :complete="nextStep > 16"
                 :color="nextStep == 16 ? 'background' : 'green'"
                 step="16"
                 dir="rtl"
@@ -629,7 +621,7 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text"
-                  @click="(nextStep = 17)"
+                  @click="nextStep = 17"
                 >
                   التالي
                   <v-icon class="mr-2">mdi-arrow-down-bold-circle</v-icon>
@@ -637,19 +629,18 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text mr-2"
-                  @click="(nextStep = 16)"
+                  @click="nextStep = 16"
                 >
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-
               </v-stepper-content>
 
               <!-- Section 17 -->
               <v-stepper-step
                 editable
                 edit-icon="mdi-check"
-                :complete="(nextStep > 17)"
+                :complete="nextStep > 17"
                 :color="nextStep == 17 ? 'background' : 'green'"
                 step="17"
                 dir="rtl"
@@ -664,7 +655,7 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text"
-                  @click="(nextStep = 18)"
+                  @click="nextStep = 18"
                 >
                   التالي
                   <v-icon class="mr-2">mdi-arrow-down-bold-circle</v-icon>
@@ -672,18 +663,18 @@
                 <v-btn
                   color="background"
                   class="rounded-br-xl rounded-tl-xl white--text mr-2"
-                  @click="(nextStep = 16)"
+                  @click="nextStep = 16"
                 >
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn>
-                </v-stepper-content>
+              </v-stepper-content>
 
               <!-- Section 18 -->
               <v-stepper-step
                 editable
                 edit-icon="mdi-check"
-                :complete="(nextStep > 18)"
+                :complete="nextStep > 18"
                 :color="nextStep == 18 ? 'background' : 'green'"
                 step="18"
                 dir="rtl"
@@ -711,7 +702,6 @@
                   السابق
                   <v-icon class="mr-2">mdi-arrow-up-bold-circle</v-icon>
                 </v-btn> -->
-
               </v-stepper-content>
 
               <!-- Section 19 -->
@@ -759,7 +749,7 @@
                   السابق
                  
                 </v-btn> -->
-                <!-- <v-btn
+              <!-- <v-btn
                   color="background"
                   class="white--text mr-2 rounded-br-xl rounded-tl-xl"
                   @click="nextStep = 1"
@@ -769,8 +759,7 @@
                  
                 </v-btn> -->
 
-                
-                <!--             
+              <!--             
                 <v-btn color="primary" @click="nextStep = 15"> التالي </v-btn>
                 <v-btn color="primary" class="mr-2" @click="nextStep = 13">
                   السابق
@@ -780,6 +769,9 @@
           </v-card-text>
           <v-card-actions class="text-center mb-2">
             <div style="width: 100%">
+
+              <v-btn color="#14425a" class=" white--text mr-2 elevation-4" @click="order"> ارسال الطلب </v-btn>
+
               <!-- <v-btn color="primary" :disabled="section == 1" @click="previous"
                 >السابق</v-btn
               >
@@ -813,10 +805,10 @@
                     text
                     v-bind="attrs"
                     @click="snackbarErro = false"
-
                   >
                     إغلاق
                   </v-btn>
+
                 </template>
               </v-snackbar>
 
@@ -830,7 +822,6 @@
                     text
                     v-bind="attrs"
                     @click="sucessAdding"
-
                   >
                     موافق
                   </v-btn>
@@ -842,22 +833,15 @@
                 تم تعديل معلومات المنظمة بنجاح
 
                 <template v-slot:action="{ attrs }">
-                  <v-btn
-                    color="white"
-                    text
-                    v-bind="attrs"
-                    @click="goOrg"
-
-                  >
+                  <v-btn color="white" text v-bind="attrs" @click="goOrg">
                     موافق
                   </v-btn>
                 </template>
               </v-snackbar>
-
-
             </div>
             <!-- && $store.state.organization.organization._id == undefined -->
           </v-card-actions>
+          
         </v-card>
       </v-row>
     </v-container>
@@ -866,11 +850,6 @@
     <!-- <v-dialog>
     
     </v-dialog> -->
-
-    <v-row justify="center">
-    
-  </v-row>
-
   </AppLayout>
 </template>
 
@@ -897,8 +876,6 @@ import Section18 from "../components/OrganizationSections/‏‏‏‏‏Section
 import Section19 from "../components/OrganizationSections/‏‏‏Section19.vue";
 import Section20 from "../components/OrganizationSections/‏‏‏Section20.vue";
 
-
-
 // import Section3 from "../components/OrganizationSections/section_3.vue";
 
 export default {
@@ -924,20 +901,19 @@ export default {
     Section18,
     Section19,
     Section20,
-
   },
   data: () => ({
     snackbarErro: false,
     snackbarSucess: false,
-    snackbarEdit:false,
+    snackbarEdit: false,
     msg: "",
     section: 1,
     dialog: true,
     nextStep: 1,
   }),
-  mounted () {
-      const id =this.$route.params.id 
-    this.$store.dispatch('organization/getOrganization', id )
+  mounted() {
+    const id = this.$route.params.id;
+    this.$store.dispatch("organization/getOrganization", id);
   },
   // destroyed() {
   //   this.$store.state.organization.organization =
@@ -966,8 +942,7 @@ export default {
         );
         this.$store.state.organization.organization =
           this.$store.state.organization.defaultOrganization;
-        this.snackbarSucess =true
-        
+        this.snackbarSucess = true;
       } else {
         // alert("تحقق من الحقول المطلوبة في الصفحة رقم 1 او 2");
         this.snackbarErro = true;
@@ -980,18 +955,16 @@ export default {
       );
       // this.$store.state.organization.organization =
       //   this.$store.state.organization.defaultOrganization;
-      this.snackbarEdit= true
-      console.log("Fuck Org");
+      this.snackbarEdit = true;
     },
 
     goOrg() {
       this.$router.push("/");
-      this.snackbarEdit=false
-      
+      this.snackbarEdit = false;
     },
-    sucessAdding(){
+    sucessAdding() {
       this.$router.push("/organizations");
-      this.snackbarSucess = false
+      this.snackbarSucess = false;
     },
     async checkValidate() {
       if (this.nextStep == 1) {
@@ -1000,7 +973,7 @@ export default {
           this.$store.state.sectionForm
         );
         if (resulte) this.nextStep = 2;
-      }else if (this.nextStep == 2) {
+      } else if (this.nextStep == 2) {
         let resulte = await this.$store.dispatch(
           "checkValidation",
           this.$store.state.sectionFormTow
@@ -1017,7 +990,29 @@ export default {
         if (resulte) this.nextStep = 19;
       }
     },
-    
+    async order() {
+      let resulte1 = await this.$store.dispatch(
+        "checkValidation",
+        this.$store.state.sectionForm
+      );
+      let resulte2 = await this.$store.dispatch(
+        "checkValidation",
+        this.$store.state.sectionFormTow
+      );
+      if (resulte1 && resulte2) {
+        await this.$store.dispatch(
+          "organization/createOrganization",
+          this.$store.state.organization.organization
+        );
+        this.$router.push("/");
+        this.$store.state.organization.organization =
+          this.$store.state.organization.defaultOrganization;
+        this.snackbarSucess = true;
+      } else {
+        // alert("تحقق من الحقول المطلوبة في الصفحة رقم 1 او 2");
+        this.snackbarErro = true;
+      }
+    },
   },
 };
 </script>

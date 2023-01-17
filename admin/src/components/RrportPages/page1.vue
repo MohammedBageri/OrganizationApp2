@@ -127,18 +127,8 @@
           الموقع الجغرافي
         </th>
         <td style="width: 50%">
-          {{ this.$store.state.organization.organization.mapArea.name }}
+          {{ mapArea.name }}
         </td>
-
-        <!-- <tr>
-          <th style="width: 50%; background-color: cornflowerblue;" class="tableRow">المحافظة</th>
-          <td style="width: 50%" >{{this.$store.state.organization.organization.mainCenter.state.name}}</td>
-        </tr>
-
-        <tr>
-          <th style="width: 50%; background-color: cornflowerblue;" class="tableRow">المديرية</th>
-          <td style="width: 50%" >{{this.$store.state.organization.organization.mainCenter.city.name}}</td>
-        </tr> -->
 
         <tr>
           <th
@@ -182,39 +172,7 @@
       <!-- =========================================================================================================== -->
     </table>
     <br />
-    <v-row>
-      <v-col cols="12" class="text-right"> 2- بيانات مقر المركز الرئيسي</v-col>
-    </v-row>
-    <table style="width: 100%">
-      <tr style="background-color: cornflowerblue">
-        <th style="width: 20%">المحافظة</th>
-        <th style="width: 20%">الميرية</th>
-        <th>الشارع</th>
-        <th>نوع المبنى</th>
-        <th>ملك/إجار</th>
-      </tr>
-      <tr>
-        <td style="width: 20%">
-          {{
-            this.$store.state.organization.organization.mainCenter.state.name
-          }}
-        </td>
-        <td style="width: 20%">
-          {{ this.$store.state.organization.organization.mainCenter.city.name }}
-        </td>
-        <td>
-          {{ this.$store.state.organization.organization.mainCenter.street }}
-        </td>
-        <td>
-          {{
-            this.$store.state.organization.organization.mainCenter.buildingType
-          }}
-        </td>
-        <td>
-          {{ this.$store.state.organization.organization.mainCenter.ownOrRent }}
-        </td>
-      </tr>
-    </table>
+    
   </div>
 </template>
 
@@ -299,6 +257,14 @@ export default {
       this.$store.state.organization.organization.OrganizationalChart.substring(
         7
       );
+  },
+  computed: {
+    mapArea () {
+      return this.$store.state.organization.organization.mapArea
+    }
+  },
+  async mounted () {
+    console.log(await this.$store.state.organization.organization,'asaaa');
   },
   methods: {
     lastRenew(item) {

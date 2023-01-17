@@ -12,6 +12,17 @@
             reverse
             class="hidden-print-only"
           ></v-text-field>
+          <v-item-group v-model="type">
+            <v-item v-slot="{ active, toggle }" value="newOrder">
+              <v-btn @click="newOrder" :color="active ? 'grey' : '#14425a'" class="ml-2 white--text elevation-2">طلبات جديدة</v-btn>
+            </v-item>
+            <v-item v-slot="{ active, toggle }" value="reNewOrder">
+              <v-btn @click="reNewOrder" :color="active ? 'grey' : '#14425a'" class=" white--text elevation-2">طلبات تجديد</v-btn>
+            </v-item>
+          </v-item-group>
+        
+          <!-- <v-btn @click="newOrder" color="#14425a" class=" white--text elevation-2">طلبات جديدة</v-btn>
+          <v-btn @click="reNewOrder" color="#14425a" class="mr-2 white--text elevation-2">طلبات تجديد</v-btn> -->
         </v-card-title>
         <v-data-table
           :headers="headers"
@@ -155,11 +166,13 @@ export default {
       { text: "حالة الطلب", value: "status" },
 
       {
-        text: "قبول المختص/قبول المدير/رفض/معاينة",
+        text: "قبول المدير/رفض/معاينة",
         value: "actions",
         sortable: false,
       },
     ],
+
+    type: 'newOrder',
 
     editedIndex: -1,
   }),
@@ -173,7 +186,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("order/getOrderUnderImplementing");
+    this.newOrder()
   },
   // mounted(){
   //   console.log(this.headers);
@@ -235,6 +248,16 @@ export default {
       let id = item._id;
       this.$router.push("/report?id=" + id);
     },
+
+    async newOrder() {
+      this.type = 'newOrder'
+      await this.$store.dispatch("order/getOrderUnderImplementing", {type: ''})
+    },
+    async reNewOrder() {
+      this.type = 'reNewOrder'
+      await this.$store.dispatch("order/getOrderUnderImplementing", {type: 'تجديد الترخيص'})
+    }
+
     // printOrg() {
     //   this.$router.push("/printorganization");
     // },

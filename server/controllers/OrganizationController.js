@@ -4,23 +4,23 @@ const Organization = require('../models/Organization');
 const User = require('../models/User');
 
 const getAllOrganizations = async (req, res) => {
-  const { isActive, localOrInternational, type, city } = req.query;
-  const queryObject = {};
+  // const { isActive, localOrInternational, type, city } = req.query;
+  // const queryObject = {};
 
-  if (isActive) {
-    queryObject.isActive = isActive;
-  }
-  if (localOrInternational) {
-    queryObject.localOrInternational = localOrInternational;
-  }
-  if (type) {
-    queryObject.type = type;
-  }
-  if (city) {
-    queryObject.city = city;
-  }
+  // if (isActive) {
+  //   queryObject.isActive = isActive;
+  // }
+  // if (localOrInternational) {
+  //   queryObject.localOrInternational = localOrInternational;
+  // }
+  // if (type) {
+  //   queryObject.type = type;
+  // }
+  // if (city) {
+  //   queryObject.city = city;
+  // }
 
-  let organization = await OrganizationService.getAllOrganizations(queryObject);
+  let organization = await OrganizationService.getAllOrganizations();
 
   res.status(StatusCodes.OK).json({ organization });
 };

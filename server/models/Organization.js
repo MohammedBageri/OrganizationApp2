@@ -226,6 +226,9 @@ const OrganizationSchema = new mongoose.Schema({
     type: Date,
     //required: [true],
   },
+  permitExpireDate:{
+    type:Date
+  },
   fieldWork: {
     type: String,
     //required: [true, "Please provide field Work"],
@@ -268,6 +271,18 @@ const OrganizationSchema = new mongoose.Schema({
     type: String,
   },
   bond: {
+    type: String,
+  },
+  bondNumber: {
+    type: String, 
+  },
+  bondAmount: {
+    type: String,
+  },
+  bondDate: {
+    type: String,
+  },
+  bondNote: {
     type: String,
   },
   certficate: {

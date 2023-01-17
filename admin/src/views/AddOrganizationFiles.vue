@@ -893,7 +893,7 @@
           // alert("تحقق من الحقول المطلوبة في الصفحة رقم 1 او 2");
           this.snackbarErro = true;
         }
-      },
+      }, 
       async edit() {
         await this.$store.dispatch(
           "organization/updateOrganization",

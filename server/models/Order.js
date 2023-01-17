@@ -12,7 +12,8 @@ const OrderSchema = new mongoose.Schema({
     enum:['منتهي','مكتمل','مرحلة الدفع','قيد الإنتظار','قيد التنفيذ'],
   },
   type:{
-    type:String
+    type:String,
+    default:''
   }
 },
 { timestamps: true }

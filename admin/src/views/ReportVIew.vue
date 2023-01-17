@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-container>
-        <v-row>
+        <v-row v-if="valid">
           <!-- :data="$store.state.organization.organization" -->
           <div class="page" v-for="(page, index) in pages" :key="index">
             <Page1 v-if="index == 0" />
@@ -38,6 +38,7 @@ import Page10 from "../components/RrportPages/page10.vue";
 import Page11 from "../components/RrportPages/page11.vue";
 export default {
   data: () => ({
+    valid:false,
     pages: 11,
   }),
   components: {
@@ -56,8 +57,9 @@ export default {
   },
   async mounted(){
     let id = this.$route.query.id
-    console.log(id)
+    console.log(id,'ss')
     await this.$store.dispatch('organization/getOrganization', id)
+    this.valid = true
     // this.$router.currentRoute.go();
   }
   

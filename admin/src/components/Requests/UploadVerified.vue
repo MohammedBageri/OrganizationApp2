@@ -8,9 +8,19 @@
             append-icon="mdi-magnify"
             label="بحث"
             single-line
+            full-width
             reverse
           >
           </v-text-field>
+          <v-item-group v-model="type">
+            <v-item v-slot="{ active, toggle }" value="newOrder">
+              <v-btn @click="newOrder" :color="active ? 'grey' : '#14425a'" class="ml-2 white--text elevation-2">طلبات جديدة</v-btn>
+            </v-item>
+            <v-item v-slot="{ active, toggle }" value="reNewOrder">
+              <v-btn @click="reNewOrder" :color="active ? 'grey' : '#14425a'" class=" white--text elevation-2">طلبات تجديد</v-btn>
+            </v-item>
+          </v-item-group>
+        
         </v-card-title>
         <v-data-table
           :headers="headers"
@@ -24,6 +34,7 @@
             </v-icon>
           </template>
         </v-data-table>
+        <!-- <v-btn color="green" @click="uploadDialog=true">Open</v-btn> -->
       </v-card>
 
       <v-dialog
@@ -35,12 +46,41 @@
           <v-card>
             <v-toolbar color="green" dark dir="rtl" flat>
               <v-icon class="ml-2">mdi-file-upload-outline</v-icon>
-              رفع السند المعمد
+              رفع الترخيص المعمد
             </v-toolbar>
             <v-card-text dir="rtl">
-              <v-file-input
+              <v-text-field
+                v-model="pNumber"
                 color="#14425a"
                 class="mt-10 rounded-l-xl rounded-tr-xl rounded-br-0"
+                label="رقم الترخيص"
+                outlined
+                dense
+                reverse
+              ></v-text-field>
+              <v-text-field
+                v-model="pDate"
+                color="#14425a"
+                type="date"
+                class=" rounded-l-xl rounded-tr-xl rounded-br-0"
+                label="تاريخ الترخيص"
+                outlined
+                dense
+                reverse
+              ></v-text-field>
+              <v-text-field
+                v-model="eDate"
+                color="#14425a"
+                type="date"
+                class=" rounded-l-xl rounded-tr-xl rounded-br-0"
+                label="تاريخ إنتهاء الترخيص"
+                outlined
+                dense
+                reverse
+              ></v-text-field>
+              <v-file-input
+                color="#14425a"
+                class="rounded-l-xl rounded-tr-xl rounded-br-0"
                 @change="uploadFile"
                 outlined
                 dense
@@ -99,9 +139,14 @@ export default {
         sortable: false,
       },
     ],
+
+    pNumber: "",
+    pDate: "",
+    eDate: "",
+    type: 'newOrder'
   }),
   mounted(){
-    this.$store.dispatch("order/getOrderCompleted")
+    this.newOrder()
   },
   methods: {
     upload(item) {
@@ -110,6 +155,9 @@ export default {
     },
     async uploadCertficate(){
       const formData = new FormData();
+      formData.append("permitNumber", this.pNumber)
+      formData.append("permitDate", this.pDate)
+      formData.append("permitExpireData", this.eDate)
      formData.append("certficate", this.certficateFile[0])
      
      const id = this.id
@@ -132,6 +180,17 @@ export default {
       this.certficateFile.push(event.target.files[0]);
       console.log(this.certficateFile);
     },
+
+    async newOrder() {
+      this.type = 'newOrder'
+      await this.$store.dispatch("order/getOrderCompleted", {type: ''})
+      
+    },
+    async reNewOrder() {
+      this.type = 'reNewOrder'
+      await this.$store.dispatch("order/getOrderCompleted", {type: 'تجديد الترخيص'})
+      
+    }
   },
 };
 </script>

@@ -138,7 +138,7 @@ const routes = [
   {
     path: '/report',
     name: 'Report',
-    component: () => import('../views/ReportView.vue')
+    component: () => import('../views/ReportVIew.vue')
   }
 
 ]

@@ -15,6 +15,7 @@ const organization = {
       lastRenewalDate: "",
       permitNumber: "",
       permitDate: "",
+      permitExpireData: "",
       fieldWork: "",
       email: "",
       // isActive: "",
@@ -67,7 +68,12 @@ const organization = {
       branche: [],
       facilitiesAndCenter: [],
       risks: [],
+      bondNumber: "",
+      bondAmount: "",
+      bondNote: "",
+      bondDate: "",
       bond: null,
+
       certficate: null
     },
     defaultOrganization: {
@@ -149,6 +155,7 @@ const organization = {
         await axios.get(`/api/Organizations/${id}`).then((res) => {
           if (res.status === 200) {
             commit("set_organization", res.data.organization);
+            console.log(res.data.organization,'asasas');
             console.log(this.state.organization.organization);
           } else {
             //Error
@@ -187,11 +194,7 @@ const organization = {
         });
 
         state.organization.id = res.data.result._id
-        console.log('iam قثس', res.data.result._id);
-        console.log('iam here', state.organization.id);
-        console.log(res);
         commit('set_organization', res.data.result)
-        console.log(state.organization)
 
         state.organization.logo = res.data.image;
         state.organization.OrganizationalChart = res.data.chart;

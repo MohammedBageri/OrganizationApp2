@@ -59,7 +59,7 @@ export default {
       { text: "هاتف المؤسسة", align: "center", sortable: false, value: "phone" },
       { text: "تاريخ التأسيس", align: "center", sortable: false, value: "lastRenewalDate" },
       { text: "النطاق الجغرافي", align: "center", sortable: false, value: "mapArea.name" },
-      { text: "نوع المؤسسة", align: "center", sortable: false, value: "type" },
+      { text: "مجال عمل المؤسسة", align: "center", sortable: false, value: "type" },
 
       {
         text: " الإسم",

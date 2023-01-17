@@ -4,11 +4,13 @@ const _ = require('lodash');
 
 const getAllOrder = async (req, res) => {
   const user = req.user.userId;
-  const { status } = req.query;
+  const { status,type } = req.query;
   const queryObject = {};
   if (status) {
     queryObject.status = status;
+    queryObject.type = type;
   }
+  
 
   let orders = await OrderService.getAllOrder(user,queryObject);
   res.status(StatusCodes.OK).json(orders);

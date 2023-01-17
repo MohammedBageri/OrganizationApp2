@@ -100,7 +100,7 @@ export default {
         filterable: true,
         value: "nameAr",
       },
-      { text: "نوع المؤسسة", sortable: false, value: "type" },
+      { text: "مجال عمل المؤسسة", sortable: false, value: "type" },
       { text: "محلية/دولية", sortable: false, value: "localOrInternational" },
       { text: "المحافظة", sortable: false, value: "mapArea.name" },
       { text: "المديرية", sortable: false, value: "mainCenter.city.name" },

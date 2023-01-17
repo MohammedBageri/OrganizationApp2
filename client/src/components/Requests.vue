@@ -103,7 +103,7 @@
           filterable: true,
           value: "nameAr",
         },
-        { text: "نوع المؤسسة", value: "type" },
+        { text: "مجال عمل المؤسسة", value: "type" },
         { text: "محلية/دولية", value: "localOrInternational" },
         { text: "المحافظة", value: "state.name" },
         { text: "المديرية", value: "city.name" },

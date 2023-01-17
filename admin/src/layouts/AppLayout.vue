@@ -12,7 +12,7 @@
         </v-toolbar>
       </div>
       <!-- main content -->
-      <div class="backgroundBody mt-16 content">
+      <div class="grey lighten-4 mt-16 content">
         <slot />
       </div>
     </div>
